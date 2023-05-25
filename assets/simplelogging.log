@@ -1,0 +1,5 @@
+2023-05-25 22:13:35,321669 INFO /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:18 Infos zum Ablauf
+2023-05-25 22:13:35,321765 DEBUG /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:19 Debugging von Programmteile
+2023-05-25 22:13:35,321778 WARNING /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:20 Das Programm kann noch weiterlaufen
+2023-05-25 22:13:35,321787 ERROR /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:21 Das ist schon ein richtig schwerwiegender Fehler
+2023-05-25 22:13:35,321795 FATAL /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:22 Hier fehlt z.B. schon der Speicher um weiterzu machen
