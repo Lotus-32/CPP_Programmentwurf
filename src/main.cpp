@@ -6,14 +6,28 @@ using namespace std;
 
 INITIALIZE_EASYLOGGINGPP
 
-// getopt_long options
-static const struct option long_options[] = {{"help", no_argument, 0, 'h'}, 0};
-
 const char* help_message = R"(
-Usage: programm [Optionen] [Dateien]
+Eingabe: codegenerator [Optionen] [Dateien]
 
 Optionen:
-  -h, --help            Zeigt diesen Hilfetext an
+  -o, --outputfilename FILENAME Setzt den Namen der Outputfiles
+  -t, --outputtype TYPE         Setzt den Dateityp des generierten Codes (gültige Optionen: C, CPP)
+  -d, --headerdir DIR           Setzt das Verzeichnis für die Header-Datei
+  -s, --sourcedir DIR           Setzt das Verzeichnis für die Source-Datei
+  -n, --namespace NAMESPACE     Setzt den Namespace
+  -l, --signperline X           Setzt die Anzahl der Zeichen pro Zeile für Zeilenumbrüche in generierten Variablen
+  -v, --sortbyvarname           Sortiert die Variablen nach ihrem Namen
+  -h, --help                    Zeigt diesen Hilfetext an
+
+
+Autorenteam:
+  Timo Bauermeister
+  Jannik Kiebler-Schauer
+  Mark Sachße
+  Tobias Skoberla
+
+Email:
+  tobias.skoberla@gmail.com
 )";
 
 /**
@@ -43,23 +57,72 @@ void initLogging() {
 int main(int argc, char** argv) {
   initLogging();
 
+  string outputFilename;
+  string outputType;
+  string headerDir;
+  string sourceDir;
+  string namespaceStr;
+  int signPerLine = -1;
+  bool sortByVarName = false;
+
+  static const struct option long_options[] = {
+      {"outputfilename", required_argument, 0, 'o'},
+      {"outputtype", required_argument, 0, 't'},
+      {"headerdir", required_argument, 0, 'd'},
+      {"sourcedir", required_argument, 0, 's'},
+      {"namespace", required_argument, 0, 'n'},
+      {"signperline", required_argument, 0, 'l'},
+      {"sortbyvarname", no_argument, 0, 'v'},
+      {"help", no_argument, 0, 'h'},
+      {0, 0, 0, 0}};
+
   int option;
-  while ((option = getopt_long(argc, argv, "h", long_options, nullptr)) != -1) {
+  while ((option = getopt_long(argc, argv, "ho:t:d:s:n:l:v", long_options,
+                               nullptr)) != -1) {
     switch (option) {
-      // TODO: More options
       case 'h':
-        cout << help_message << endl;
+        std::cout << help_message << std::endl;
         return 0;
+      case 'o':
+        outputFilename = optarg;
+        LOG(INFO) << "Outputfilename: " << outputFilename;
+        break;
+      case 't':
+        outputType = optarg;
+        if (outputType != "C" && outputType != "CPP") {
+          LOG(ERROR) << "Ungültiger Outputtype: " << outputType;
+          return 1;
+        }
+        LOG(INFO) << "Outputtype: " << outputType;
+        break;
+      case 'd':
+        headerDir = optarg;
+        LOG(INFO) << "Headerdir: " << headerDir;
+        break;
+      case 's':
+        sourceDir = optarg;
+        LOG(INFO) << "Sourcedir: " << sourceDir;
+        break;
+      case 'n':
+        namespaceStr = optarg;
+        LOG(INFO) << "Namespace: " << namespaceStr;
+        break;
+      case 'l':
+        signPerLine = stoi(optarg);  // string to int
+        LOG(INFO) << "Signperline: " << signPerLine;
+        break;
+      case 'v':
+        LOG(INFO) << "Sortbyvarname: true";
+        break;
       case '?':
-        // Undefined option
-        LOG(ERROR) << "Unbekannte Option: " << argv[optind - 1];
+        LOG(ERROR) << "Unbekannte Option: " << optopt;
         return 1;
     }
   }
 
   // TODO: File handling
   for (int i = optind; i < argc; i++) {
-    std::cout << "Übergebene Datei: " << argv[i] << std::endl;
+    cout << "Übergebene Datei: " << argv[i] << endl;
   }
 
   return 0;
