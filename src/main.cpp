@@ -1,6 +1,20 @@
 #include <easylogging++.h>
+#include <getopt.h>
+#include <stdio.h>
+
+using namespace std;
 
 INITIALIZE_EASYLOGGINGPP
+
+// getopt_long options
+static const struct option long_options[] = {{"help", no_argument, 0, 'h'}, 0};
+
+const char* help_message = R"(
+Usage: programm [Optionen] [Dateien]
+
+Optionen:
+  -h, --help            Zeigt diesen Hilfetext an
+)";
 
 /**
  * @brief Initializes the logging system
@@ -28,6 +42,25 @@ void initLogging() {
 
 int main(int argc, char** argv) {
   initLogging();
+
+  int option;
+  while ((option = getopt_long(argc, argv, "h", long_options, nullptr)) != -1) {
+    switch (option) {
+      // TODO: More options
+      case 'h':
+        cout << help_message << endl;
+        return 0;
+      case '?':
+        // Undefined option
+        LOG(ERROR) << "Unbekannte Option: " << argv[optind - 1];
+        return 1;
+    }
+  }
+
+  // TODO: File handling
+  for (int i = optind; i < argc; i++) {
+    std::cout << "Übergebene Datei: " << argv[i] << std::endl;
+  }
 
   return 0;
 }

@@ -3,3 +3,27 @@
 2023-05-25 22:13:35,321778 WARNING /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:20 Das Programm kann noch weiterlaufen
 2023-05-25 22:13:35,321787 ERROR /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:21 Das ist schon ein richtig schwerwiegender Fehler
 2023-05-25 22:13:35,321795 FATAL /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:22 Hier fehlt z.B. schon der Speicher um weiterzu machen
+2023-05-25 22:46:59,911813 INFO /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:38 Option a
+2023-05-25 22:47:06,380069 INFO /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:41 Option b
+2023-05-25 22:47:09,095885 ERROR /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:48 Option c benoetigt einen Wert
+2023-05-25 22:47:14,641130 INFO /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:44 Option c mit Wert 5
+2023-05-25 22:47:19,263599 INFO /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:44 Option c mit Wert 5
+2023-05-25 22:47:28,262196 INFO /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:44 Option c mit Wert 5
+2023-05-25 22:47:28,262256 INFO /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:38 Option a
+2023-05-25 22:47:34,759144 INFO /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:44 Option c mit Wert 5
+2023-05-25 22:47:34,759213 INFO /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:38 Option a
+2023-05-25 22:49:18,956306 INFO /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:44 Option c mit Wert 5
+2023-05-25 22:49:18,956589 INFO /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:38 Option a
+2023-05-25 22:49:23,438586 INFO /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:44 Option c mit Wert 5
+2023-05-25 22:49:23,438671 INFO /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:38 Option a
+2023-05-25 22:49:23,438708 ERROR /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:53 Unbekannte Option -100
+2023-05-25 22:49:44,628095 ERROR /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:53 Unbekannte Option -100
+2023-05-25 22:49:58,939376 ERROR /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:53 Unbekannte Option -100
+2023-05-25 22:50:38,233206 INFO /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:38 Option a
+2023-05-25 22:52:24,141948 INFO /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:39 Option a
+2023-05-25 22:52:26,081440 ERROR /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:54 Unbekannte Option -100
+2023-05-25 22:52:55,496341 ERROR /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:54 Unbekannte Option -100
+2023-05-25 22:52:57,890532 ERROR /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:54 Unbekannte Option -101
+2023-05-25 22:53:12,551039 ERROR /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:54 Unbekannte Option -101
+2023-05-25 23:26:38,138359 ERROR /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:54 Unbekannte Option: --heee
+2023-05-25 23:27:32,111901 ERROR /root/Studium/Programmieren/C/Programmentwurf/src/main.cpp:54 Unbekannte Option: --heee
