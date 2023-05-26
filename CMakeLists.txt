@@ -31,9 +31,9 @@ ELSE()
 ENDIF()
 
 IF(MINGW)
-    target_link_libraries(${PROJECT_NAME} easylogginglib jsoncpp.dll)
+    target_link_libraries(${PROJECT_NAME} ctexttocpp easylogginglib jsoncpp.dll)
 ELSE(MINGW)
-    target_link_libraries(${PROJECT_NAME} easylogginglib jsoncpp)
+    target_link_libraries(${PROJECT_NAME} ctexttocpp easylogginglib jsoncpp)
 ENDIF()
 
 
