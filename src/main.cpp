@@ -1,3 +1,4 @@
+#include <CTextToCPP.h>
 #include <easylogging++.h>
 #include <getopt.h>
 #include <stdio.h>
@@ -23,7 +24,7 @@ Optionen:
 Autorenteam:
   Timo Bauermeister
   Jannik Kiebler-Schauer
-  Mark Sachße
+  Marc Sachße
   Tobias Skoberla
 
 Email:
