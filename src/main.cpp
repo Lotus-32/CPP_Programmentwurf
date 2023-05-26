@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
   string headerDir;
   string sourceDir;
   string namespaceStr;
-  int signPerLine = -1;
+  int signPerLine = 60;
   bool sortByVarName = false;
 
   static const struct option long_options[] = {

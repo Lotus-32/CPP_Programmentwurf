@@ -21,5 +21,20 @@ add_executable(${PROJECT_NAME} src/main.cpp)
 # Add the subdirectory "easyloggingpp" to the build
 add_subdirectory(src)
 
+# Add the subdirectory "jsoncpp" to the build
+IF(MINGW)
+    # Include JSONCPP
+    # include_directories(C:/)
+    # link_directories(C:/)
+ELSE()
+    # UNIX finds it automatically
+ENDIF()
+
+IF(MINGW)
+    target_link_libraries(${PROJECT_NAME} easylogginglib jsoncpp.dll)
+ELSE(MINGW)
+    target_link_libraries(${PROJECT_NAME} easylogginglib jsoncpp)
+ENDIF()
+
+
 # Link the executable to the libraries
-target_link_libraries(${PROJECT_NAME} easylogginglib)
