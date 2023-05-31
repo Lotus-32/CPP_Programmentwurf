@@ -45,32 +45,32 @@ class Options {
   bool isSortByVarName = false;
   bool sortByVarName;
 
-  // const char* const HELP_MESSAGE;
+  void printHelp();
+
+  static const char* const short_options;
+
   const char* const HELP_MESSAGE = R"(
 Eingabe: codegenerator [Optionen] [Dateien]
 
 Optionen:
-  -o, --outputfilename FILENAME Setzt den Namen der Outputfiles
-  -t, --outputtype TYPE         Setzt den Dateityp des generierten Codes (gültige Optionen: C, CPP)
-  -d, --headerdir DIR           Setzt das Verzeichnis für die Header-Datei
-  -s, --sourcedir DIR           Setzt das Verzeichnis für die Source-Datei
-  -n, --namespace NAMESPACE     Setzt den Namespace
-  -l, --signperline X           Setzt die Anzahl der Zeichen pro Zeile für Zeilenumbrüche in generierten Variablen
-  -v, --sortbyvarname           Sortiert die Variablen nach ihrem Namen
-  -h, --help                    Zeigt diesen Hilfetext an
-
+-o, --outputfilename FILENAME Setzt den Namen der Outputfiles
+-t, --outputtype TYPE Setzt den Dateityp des generierten Codes (gültige Optionen: C, CPP)
+-d, --headerdir DIR Setzt das Verzeichnis für die Header-Datei
+-s, --sourcedir DIR Setzt das Verzeichnis für die Source-Datei
+-n, --namespace NAMESPACE Setzt den Namespace
+-l, --signperline X Setzt die Anzahl der Zeichen pro Zeile für Zeilenumbrüche in generierten Variablen
+-v, --sortbyvarname Sortiert die Variablen nach ihrem Namen
+-h, --help Zeigt diesen Hilfetext an
 
 Autorenteam:
-  Timo Bauermeister
-  Jannik Kiebler-Schauer
-  Marc Sachße
-  Tobias Skoberla
+Timo Bauermeister
+Jannik Kiebler-Schauer
+Marc Sachße
+Tobias Skoberla
 
 Email:
-  tobias.skoberla@gmail.com
+tobias.skoberla@gmail.com
 )";
-
-  void printHelp();
 };
 
 #endif  // OPTIONS_H

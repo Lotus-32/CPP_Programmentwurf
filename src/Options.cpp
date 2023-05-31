@@ -18,7 +18,7 @@ void Options::parseOptions(int argc, char** argv) {
       {0, 0, 0, 0}};
 
   int option;
-  while ((option = getopt_long(argc, argv, "ho:t:d:s:n:l:v", long_options,
+  while ((option = getopt_long(argc, argv, short_options, long_options,
                                nullptr)) != -1) {
     switch (option) {
       case 'h':
@@ -102,3 +102,5 @@ bool Options::isSetSortByVarName() const { return isSortByVarName; }
 bool Options::getSortByVarName() const { return sortByVarName; }
 
 void Options::printHelp() { cout << HELP_MESSAGE << endl; }
+
+const char* const Options::short_options = "ho:t:d:s:n:l:v";
