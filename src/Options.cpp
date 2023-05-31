@@ -1,6 +1,8 @@
 #include <Options.h>
 #include <easylogging++.h>
 
+namespace Codegenerator {
+
 Options::Options() {}
 
 Options::~Options() {}
@@ -104,3 +106,5 @@ bool Options::getSortByVarName() const { return sortByVarName; }
 void Options::printHelp() { cout << HELP_MESSAGE << endl; }
 
 const char* const Options::short_options = "ho:t:d:s:n:l:v";
+
+}  // namespace Codegenerator

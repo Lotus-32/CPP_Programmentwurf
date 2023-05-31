@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 using namespace std;
+using namespace Codegenerator;
 
 INITIALIZE_EASYLOGGINGPP
 

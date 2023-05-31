@@ -7,6 +7,7 @@
 
 using namespace std;
 
+namespace Codegenerator {
 class Options {
  public:
   Options();
@@ -50,27 +51,32 @@ class Options {
   static const char* const short_options;
 
   const char* const HELP_MESSAGE = R"(
-Eingabe: codegenerator [Optionen] [Dateien]
+    Input: codegenerator [Options] [Files]
 
-Optionen:
--o, --outputfilename FILENAME Setzt den Namen der Outputfiles
--t, --outputtype TYPE Setzt den Dateityp des generierten Codes (gültige Optionen: C, CPP)
--d, --headerdir DIR Setzt das Verzeichnis für die Header-Datei
--s, --sourcedir DIR Setzt das Verzeichnis für die Source-Datei
--n, --namespace NAMESPACE Setzt den Namespace
--l, --signperline X Setzt die Anzahl der Zeichen pro Zeile für Zeilenumbrüche in generierten Variablen
--v, --sortbyvarname Sortiert die Variablen nach ihrem Namen
--h, --help Zeigt diesen Hilfetext an
+    Options:
+      -o, --outputfilename FILENAME   Sets the name of the output files.
+      -t, --outputtype TYPE           Sets the file type of the generated code (valid options: C, CPP).
+      -d, --headerdir DIR             Sets the directory for the header file.
+      -s, --sourcedir DIR             Sets the directory for the source file.
+      -n, --namespace NAMESPACE       Sets the namespace.
+      -l, --signperline X             Sets the number of characters per line before a line break happens. 
+                                      For generated variables.
+      -v, --sortbyvarname             Sorts the variables by their name.
+      -h, --help                      Displays this help text.
 
-Autorenteam:
-Timo Bauermeister
-Jannik Kiebler-Schauer
-Marc Sachße
-Tobias Skoberla
+    Examples:
+      codegenerator -o test -t C -d ./include -s ./src -n test -l 80 -v file1.txt file2.txt
+      codegenerator --outputfilename test --outputtype C --namespace test --signperline 80 --sortbyvarname file1.txt
 
-Email:
-tobias.skoberla@gmail.com
-)";
+    Author Team:
+      Timo Bauermeister
+      Jannik Kiebler-Schauer
+      Marc Sachße
+      Tobias Skoberla
+
+    Email:
+      tobias.skoberla@gmail.com
+    )";
 };
-
+}  // namespace Codegenerator
 #endif  // OPTIONS_H
