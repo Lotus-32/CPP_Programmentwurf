@@ -103,7 +103,10 @@ bool Options::isSetSortByVarName() const { return isSortByVarName; }
 
 bool Options::getSortByVarName() const { return sortByVarName; }
 
-void Options::printHelp() { cout << HELP_MESSAGE << endl; }
+void Options::printHelp() {
+  cout << HELP_MESSAGE << endl;
+  exit(EXIT_SUCCESS);
+}
 
 const char* const Options::short_options = "ho:t:d:s:n:l:v";
 
