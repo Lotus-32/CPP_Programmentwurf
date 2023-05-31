@@ -62,7 +62,7 @@ class Options {
       -l, --signperline X             Sets the number of characters per line before a line break happens. 
                                       For generated variables.
       -v, --sortbyvarname             Sorts the variables by their name.
-      -h, --help                      Displays this help text.
+      -h, --help                      Displays this help text and exits.
 
     Examples:
       codegenerator -o test -t C -d ./include -s ./src -n test -l 80 -v file1.txt file2.txt
@@ -74,7 +74,7 @@ class Options {
       Marc Sachße
       Tobias Skoberla
 
-    Email:
+    Contact:
       tobias.skoberla@gmail.com
     )";
 };
