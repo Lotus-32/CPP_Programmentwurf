@@ -58,10 +58,8 @@ string extractContentBetweenTags(const string& content, const string& startTag,
   return "";
 }
 
+// TODO: Ueberarbeiten
 void processParameters(const string& parameters) {
-  // Hier können Sie die Parameter auswerten und die entsprechenden Optionen
-  // definieren In diesem Beispiel geben wir einfach die Parameter im
-  // JSON-Format aus
   Json::Value json;
   Json::CharReaderBuilder readerBuilder;
   unique_ptr<Json::CharReader> reader(readerBuilder.newCharReader());
@@ -85,10 +83,10 @@ int main(int argc, char** argv) {
 
   // Start of Codegenerator ---------------------------------------------
 
-  // 1. Die Inputdatei öffnen und deren Inhalt lesen
+  // Inputdatei oeffnen und Inhalt lesen
   ifstream inputFile(files[0]);
   if (!inputFile) {
-    LOG(ERROR) << "Fehler beim Öffnen der Datei!" << endl;
+    LOG(ERROR) << "Fehler beim Oeffnen der Datei!" << endl;
     return 1;
   }
 
@@ -97,11 +95,11 @@ int main(int argc, char** argv) {
 
   inputFile.close();
 
-  // 2. Den Dateinamen ohne Erweiterung extrahieren und als Variablenname
-  // verwenden
+  // Dateinamen ohne Endung als Variablennamen verwenden
+  // TODO: Mehere Dateien verarbeiten
   string variableName = getFileNameWithoutExtension(files[0]);
 
-  // 3. Überprüfen, ob der Inhalt der Datei nur reinen Text enthält
+  // Auf Tags pruefen
   if (fileContent.find("@start") != string::npos &&
       fileContent.find("@end") != string::npos) {
     string extractedContent =
