@@ -30,11 +30,10 @@ ELSE()
     # UNIX finds it automatically
 ENDIF()
 
+# Link the executable to the libraries
 IF(MINGW)
     target_link_libraries(${PROJECT_NAME} ctexttocpp easylogginglib jsoncpp.dll)
 ELSE(MINGW)
     target_link_libraries(${PROJECT_NAME} ctexttocpp easylogginglib jsoncpp)
 ENDIF()
 
-
-# Link the executable to the libraries
