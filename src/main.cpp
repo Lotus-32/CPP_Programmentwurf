@@ -69,9 +69,9 @@ void processParameters(const string& parameters) {
 
   if (reader->parse(parameters.c_str(),
                     parameters.c_str() + parameters.length(), &json, &errors)) {
-    cout << "Parameter: " << json.toStyledString() << endl;
+    // LOG(DEBUG) << "Parameter: " << json.toStyledString() << endl;
   } else {
-    cout << "Fehler beim Parsen der Parameter: " << errors << endl;
+    LOG(ERROR) << "Fehler beim Parsen der Parameter: " << errors << endl;
   }
 }
 
@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
   // 1. Die Inputdatei öffnen und deren Inhalt lesen
   ifstream inputFile(files[0]);
   if (!inputFile) {
-    cout << "Fehler beim Öffnen der Datei!" << endl;
+    LOG(ERROR) << "Fehler beim Öffnen der Datei!" << endl;
     return 1;
   }
 
@@ -107,7 +107,7 @@ int main(int argc, char** argv) {
     string extractedContent =
         extractContentBetweenTags(fileContent, "@start\n", "@end\n");
     if (!extractedContent.empty()) {
-      cout << "Content: \n" << extractedContent << endl;
+      // LOG(DEBUG) << "Content: \n" << extractedContent << endl;
       vector<string> globales;
       vector<string> variables;
       vector<string> variablesText;
@@ -149,21 +149,21 @@ int main(int argc, char** argv) {
         }
       }
       for (auto& global : globales) {
-        cout << "Global: " << global << endl;
+        LOG(DEBUG) << "Global: " << global << endl;
       }
       for (auto& variable : variables) {
-        cout << "Variable: " << variable << endl;
+        LOG(DEBUG) << "Variable: " << variable << endl;
       }
       for (auto& text : variablesText) {
-        cout << "VariablesText: " << text << endl;
+        LOG(DEBUG) << "VariablesText: " << text << endl;
       }
       // processParameters(extractedContent);
     } else {
-      cout << "Keine Parameter gefunden!" << endl;
+      LOG(ERROR) << "Keine Parameter gefunden!" << endl;
     }
   } else {
-    cout << "Variable: " << variableName << endl;
-    cout << "Inhalt: \n" << fileContent << endl;
+    LOG(INFO) << "Variable: " << variableName << endl;
+    LOG(INFO) << "Inhalt: \n" << fileContent << endl;
   }
 
   return 0;
