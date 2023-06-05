@@ -7,6 +7,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 using namespace Codegenerator;
@@ -48,8 +49,8 @@ string getFileNameWithoutExtension(const string& filename) {
 
 string extractContentBetweenTags(const string& content, const string& startTag,
                                  const string& endTag) {
-  int startPos = content.find(startTag + "\n");
-  int endPos = content.find(endTag + "\n");
+  int startPos = content.find(startTag);
+  int endPos = content.find(endTag);
   if (startPos != string::npos && endPos != string::npos && startPos < endPos) {
     startPos += startTag.length();
     return content.substr(startPos, endPos - startPos);
@@ -104,10 +105,58 @@ int main(int argc, char** argv) {
   if (fileContent.find("@start") != string::npos &&
       fileContent.find("@end") != string::npos) {
     string extractedContent =
-        extractContentBetweenTags(fileContent, "@start", "@end");
+        extractContentBetweenTags(fileContent, "@start\n", "@end\n");
     if (!extractedContent.empty()) {
       cout << "Content: \n" << extractedContent << endl;
-      // TODO: Inhalt verarbeiten
+      vector<string> globales;
+      vector<string> variables;
+      vector<string> variablesText;
+      istringstream iss(extractedContent);
+      string line;
+      bool isComment = false;
+      string currentVariableContent = "";
+      while (getline(iss, line)) {
+        if (line.find("@global") != string::npos) {
+          size_t start = line.find('{');
+          size_t end = line.find('}');
+
+          if (start != std::string::npos && end != std::string::npos &&
+              start < end) {
+            // Extrahieren des Inhalts mit den geschweiften Klammern
+            std::string content = line.substr(start, end - start + 1);
+            processParameters(content);  // TODO: Parameter auswerten
+            globales.push_back(content);
+          }
+        }
+        if (line.find("@variable") != string::npos) {
+          size_t start = line.find('{');
+          size_t end = line.find('}');
+
+          if (start != std::string::npos && end != std::string::npos &&
+              start < end) {
+            // Extrahieren des Inhalts mit den geschweiften Klammern
+            std::string content = line.substr(start, end - start + 1);
+            processParameters(content);  // TODO: Parameter auswerten
+            variables.push_back(content);
+            isComment = true;
+          }
+        } else if (line.find("@endvariable") != string::npos) {
+          isComment = false;
+          variablesText.push_back(currentVariableContent);
+          currentVariableContent.clear();
+        } else if (isComment) {
+          currentVariableContent += line + " ";
+        }
+      }
+      for (auto& global : globales) {
+        cout << "Global: " << global << endl;
+      }
+      for (auto& variable : variables) {
+        cout << "Variable: " << variable << endl;
+      }
+      for (auto& text : variablesText) {
+        cout << "VariablesText: " << text << endl;
+      }
       // processParameters(extractedContent);
     } else {
       cout << "Keine Parameter gefunden!" << endl;
