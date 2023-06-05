@@ -69,9 +69,16 @@ void Options::parseOptions(int argc, char** argv) {
         LOG(ERROR) << "Unbekannte Option: " << optopt;
     }
   }
-  // TODO: File handling
+
+  if (optind == argc) {
+    LOG(ERROR) << "Keine Dateien angegeben.";
+    printHelp();
+  }
+
+  // Get the fileNames
   for (int i = optind; i < argc; i++) {
-    cout << "Übergebene Datei: " << argv[i] << endl;
+    fileNames.push_back(argv[i]);
+    LOG(INFO) << "File: " << fileNames.back();
   }
 }
 
@@ -102,6 +109,8 @@ int Options::getSignPerLine() const { return signPerLine; }
 bool Options::isSetSortByVarName() const { return isSortByVarName; }
 
 bool Options::getSortByVarName() const { return sortByVarName; }
+
+vector<string> Options::getFileNames() const { return fileNames; }
 
 void Options::printHelp() {
   cout << HELP_MESSAGE << endl;

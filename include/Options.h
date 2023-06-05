@@ -4,6 +4,7 @@
 #include <getopt.h>
 
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -30,6 +31,8 @@ class Options {
   bool isSetSortByVarName() const;
   bool getSortByVarName() const;
 
+  vector<string> getFileNames() const;
+
  private:
   bool isOutputFilename = false;
   string outputFilename;
@@ -46,6 +49,8 @@ class Options {
   bool isSortByVarName = false;
   bool sortByVarName;
 
+  vector<string> fileNames;
+
   void printHelp();
 
   static const char* const short_options;
@@ -54,7 +59,7 @@ class Options {
     Input: codegenerator [Options] [Files]
 
     Options:
-      -o, --outputfilename FILENAME   Sets the name of the output files.
+      -o, --outputfilename FILENAME   Sets the name of the output fileNames.
       -t, --outputtype TYPE           Sets the file type of the generated code (valid options: C, CPP).
       -d, --headerdir DIR             Sets the directory for the header file.
       -s, --sourcedir DIR             Sets the directory for the source file.

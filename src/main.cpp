@@ -39,27 +39,6 @@ int main(int argc, char** argv) {
   Options options;
   options.parseOptions(argc, argv);
 
-  if (options.isSetHeaderDir()) {
-    cout << "Headerdir: " << options.getHeaderDir() << endl;
-  }
-  if (options.isSetSourceDir()) {
-    cout << "Sourcedir: " << options.getSourceDir() << endl;
-  }
-  if (options.isSetOutputFilename()) {
-    cout << "Outputfilename: " << options.getOutputFilename() << endl;
-  }
-  if (options.isSetOutputType()) {
-    cout << "Outputtype: " << options.getOutputType() << endl;
-  }
-  if (options.isSetNamespace()) {
-    cout << "Namespace: " << options.getNamespace() << endl;
-  }
-  if (options.isSetSignPerLine()) {
-    cout << "Signperline: " << options.getSignPerLine() << endl;
-  }
-  if (options.isSetSortByVarName()) {
-    cout << "Sortbyvarname: " << options.getSortByVarName() << endl;
-  }
-
+  vector<string> files = options.getFileNames();
   return 0;
 }
