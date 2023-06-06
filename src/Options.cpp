@@ -27,7 +27,7 @@ void Options::parseOptions(int argc, char** argv) {
         printHelp();
         break;
       case 'o':
-        isOutputFilename = true;
+        isSetOutputFilename = true;
         outputFilename = optarg;
         LOG(INFO) << "Outputfilename: " << outputFilename;
         break;
@@ -37,31 +37,31 @@ void Options::parseOptions(int argc, char** argv) {
           LOG(ERROR) << "Ungültiger Outputtype: " << outputType;
           break;
         }
-        isOutputType = true;
+        isSetOutputType = true;
         LOG(INFO) << "Outputtype: " << outputType;
         break;
       case 'd':
-        isHeaderDir = true;
+        isSetHeaderDir = true;
         headerDir = optarg;
         LOG(INFO) << "Headerdir: " << headerDir;
         break;
       case 's':
-        isSourceDir = true;
+        isSetSourceDir = true;
         sourceDir = optarg;
         LOG(INFO) << "Sourcedir: " << sourceDir;
         break;
       case 'n':
-        isNamespace = true;
+        isSetNamespace = true;
         namespaceStr = optarg;
         LOG(INFO) << "Namespace: " << namespaceStr;
         break;
       case 'l':
-        isSignPerLine = true;
+        isSetSignPerLine = true;
         signPerLine = stoi(optarg);  // string to int
         LOG(INFO) << "Signperline: " << signPerLine;
         break;
       case 'v':
-        isSortByVarName = true;
+        isSetSortByVarName = true;
         sortByVarName = true;
         LOG(INFO) << "Sortbyvarname: true";
         break;
@@ -82,33 +82,61 @@ void Options::parseOptions(int argc, char** argv) {
   }
 }
 
-bool Options::isSetOutputFilename() const { return isOutputFilename; }
-
 string Options::getOutputFilename() const { return outputFilename; }
-
-bool Options::isSetOutputType() const { return isOutputType; }
 
 string Options::getOutputType() const { return outputType; }
 
-bool Options::isSetHeaderDir() const { return isHeaderDir; }
-
 string Options::getHeaderDir() const { return headerDir; }
-
-bool Options::isSetSourceDir() const { return isSourceDir; }
 
 string Options::getSourceDir() const { return sourceDir; }
 
-bool Options::isSetNamespace() const { return isNamespace; }
-
 string Options::getNamespace() const { return namespaceStr; }
-
-bool Options::isSetSignPerLine() const { return isSignPerLine; }
 
 int Options::getSignPerLine() const { return signPerLine; }
 
-bool Options::isSetSortByVarName() const { return isSortByVarName; }
-
 bool Options::getSortByVarName() const { return sortByVarName; }
+
+void Options::setOutputFilename(string outputFilename) {
+  if (!isSetOutputFilename) {
+    this->outputFilename = outputFilename;
+  }
+}
+
+void Options::setOutputType(string outputType) {
+  if (!isSetOutputType) {
+    this->outputType = outputType;
+  }
+}
+
+void Options::setHeaderDir(string headerDir) {
+  if (!isSetHeaderDir) {
+    this->headerDir = headerDir;
+  }
+}
+
+void Options::setSourceDir(string sourceDir) {
+  if (!isSetSourceDir) {
+    this->sourceDir = sourceDir;
+  }
+}
+
+void Options::setNamespace(string namespaceStr) {
+  if (!isSetNamespace) {
+    this->namespaceStr = namespaceStr;
+  }
+}
+
+void Options::setSignPerLine(int signPerLine) {
+  if (!isSetSignPerLine) {
+    this->signPerLine = signPerLine;
+  }
+}
+
+void Options::setSortByVarName(bool sortByVarName) {
+  if (!isSetSortByVarName) {
+    this->sortByVarName = sortByVarName;
+  }
+}
 
 vector<string> Options::getFileNames() const { return fileNames; }
 

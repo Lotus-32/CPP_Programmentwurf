@@ -16,37 +16,38 @@ class Options {
 
   void parseOptions(int argc, char** argv);
 
-  bool isSetOutputFilename() const;
   string getOutputFilename() const;
-  bool isSetOutputType() const;
   string getOutputType() const;
-  bool isSetHeaderDir() const;
   string getHeaderDir() const;
-  bool isSetSourceDir() const;
   string getSourceDir() const;
-  bool isSetNamespace() const;
   string getNamespace() const;
-  bool isSetSignPerLine() const;
   int getSignPerLine() const;
-  bool isSetSortByVarName() const;
   bool getSortByVarName() const;
+
+  void setOutputFilename(string outputFilename);
+  void setOutputType(string outputType);
+  void setHeaderDir(string headerDir);
+  void setSourceDir(string sourceDir);
+  void setNamespace(string namespaceStr);
+  void setSignPerLine(int signPerLine);
+  void setSortByVarName(bool sortByVarName);
 
   vector<string> getFileNames() const;
 
  private:
-  bool isOutputFilename = false;
+  bool isSetOutputFilename = false;
   string outputFilename;
-  bool isOutputType = false;
+  bool isSetOutputType = false;
   string outputType;
-  bool isHeaderDir = false;
+  bool isSetHeaderDir = false;
   string headerDir;
-  bool isSourceDir = false;
+  bool isSetSourceDir = false;
   string sourceDir;
-  bool isNamespace = false;
+  bool isSetNamespace = false;
   string namespaceStr;
-  bool isSignPerLine = false;
+  bool isSetSignPerLine = false;
   int signPerLine;
-  bool isSortByVarName = false;
+  bool isSetSortByVarName = false;
   bool sortByVarName;
 
   vector<string> fileNames;
