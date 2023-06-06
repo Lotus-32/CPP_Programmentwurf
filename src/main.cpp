@@ -83,86 +83,87 @@ int main(int argc, char** argv) {
 
   // Start of Codegenerator ---------------------------------------------
 
-  // Inputdatei oeffnen und Inhalt lesen
-  ifstream inputFile(files[0]);
-  if (!inputFile) {
-    LOG(ERROR) << "Fehler beim Oeffnen der Datei!" << endl;
-    return 1;
-  }
+  for (string file : files) {
+    LOG(INFO) << "Datei: " << file << endl;
 
-  string fileContent((istreambuf_iterator<char>(inputFile)),
-                     istreambuf_iterator<char>());
+    // Inputdatei oeffnen und Inhalt lesen
+    ifstream inputFile(file);
+    if (!inputFile) {
+      LOG(ERROR) << "Fehler beim Oeffnen der Datei: " << file << endl;
+      continue;
+    }
 
-  inputFile.close();
+    string fileContent((istreambuf_iterator<char>(inputFile)),
+                       istreambuf_iterator<char>());
+    inputFile.close();
 
-  // Dateinamen ohne Endung als Variablennamen verwenden
-  // TODO: Mehere Dateien verarbeiten
-  string variableName = getFileNameWithoutExtension(files[0]);
+    string variableName = getFileNameWithoutExtension(file);
 
-  // Keine Tags vorhanden
-  if (!(fileContent.find("@start") != string::npos &&
-        fileContent.find("@end") != string::npos)) {
-    LOG(INFO) << "Variable: " << variableName << endl;
-    LOG(INFO) << "Inhalt: \n" << fileContent << endl;
-    return 0;
-  }
+    // Keine Tags vorhanden
+    if (!(fileContent.find("@start") != string::npos &&
+          fileContent.find("@end") != string::npos)) {
+      LOG(INFO) << "Variable: " << variableName << endl;
+      LOG(INFO) << "Inhalt: \n" << fileContent << endl;
+      continue;
+    }
 
-  string extractedContent =
-      extractContentBetweenTags(fileContent, "@start\n", "@end\n");
-  if (extractedContent.empty()) {
-    LOG(ERROR) << "Keine Parameter gefunden!" << endl;
-    return 1;
-  }
+    string extractedContent =
+        extractContentBetweenTags(fileContent, "@start\n", "@end\n");
+    if (extractedContent.empty()) {
+      LOG(ERROR) << "Keine Parameter gefunden!" << endl;
+      continue;
+    }
 
-  // LOG(DEBUG) << "Content: \n" << extractedContent << endl;
-  vector<string> globales;
-  vector<string> variables;
-  vector<string> variablesText;
-  istringstream iss(extractedContent);
-  string line;
-  bool isComment = false;
-  string currentVariableContent = "";
-  while (getline(iss, line)) {
-    if (line.find("@global") != string::npos) {
-      size_t start = line.find('{');
-      size_t end = line.find('}');
+    // LOG(DEBUG) << "Content: \n" << extractedContent << endl;
+    vector<string> globales;
+    vector<string> variables;
+    vector<string> variablesText;
+    istringstream iss(extractedContent);
+    string line;
+    bool isComment = false;
+    string currentVariableContent = "";
+    while (getline(iss, line)) {
+      if (line.find("@global") != string::npos) {
+        size_t start = line.find('{');
+        size_t end = line.find('}');
 
-      if (start != std::string::npos && end != std::string::npos &&
-          start < end) {
-        // Extrahieren des Inhalts mit den geschweiften Klammern
-        std::string content = line.substr(start, end - start + 1);
-        globales.push_back(content);
+        if (start != std::string::npos && end != std::string::npos &&
+            start < end) {
+          // Extrahieren des Inhalts mit den geschweiften Klammern
+          std::string content = line.substr(start, end - start + 1);
+          globales.push_back(content);
+        }
+      }
+      if (line.find("@variable") != string::npos) {
+        size_t start = line.find('{');
+        size_t end = line.find('}');
+
+        if (start != std::string::npos && end != std::string::npos &&
+            start < end) {
+          // Extrahieren des Inhalts mit den geschweiften Klammern
+          std::string content = line.substr(start, end - start + 1);
+          variables.push_back(content);
+          isComment = true;
+        }
+      } else if (line.find("@endvariable") != string::npos) {
+        isComment = false;
+        variablesText.push_back(currentVariableContent);
+        currentVariableContent.clear();
+      } else if (isComment) {
+        currentVariableContent += line + " ";
       }
     }
-    if (line.find("@variable") != string::npos) {
-      size_t start = line.find('{');
-      size_t end = line.find('}');
-
-      if (start != std::string::npos && end != std::string::npos &&
-          start < end) {
-        // Extrahieren des Inhalts mit den geschweiften Klammern
-        std::string content = line.substr(start, end - start + 1);
-        variables.push_back(content);
-        isComment = true;
-      }
-    } else if (line.find("@endvariable") != string::npos) {
-      isComment = false;
-      variablesText.push_back(currentVariableContent);
-      currentVariableContent.clear();
-    } else if (isComment) {
-      currentVariableContent += line + " ";
+    for (auto& global : globales) {
+      LOG(DEBUG) << "Global: " << global << endl;
     }
+    for (auto& variable : variables) {
+      LOG(DEBUG) << "Variable: " << variable << endl;
+    }
+    for (auto& text : variablesText) {
+      LOG(DEBUG) << "VariablesText: " << text << endl;
+    }
+    // processParameters(extractedContent);
   }
-  for (auto& global : globales) {
-    LOG(DEBUG) << "Global: " << global << endl;
-  }
-  for (auto& variable : variables) {
-    LOG(DEBUG) << "Variable: " << variable << endl;
-  }
-  for (auto& text : variablesText) {
-    LOG(DEBUG) << "VariablesText: " << text << endl;
-  }
-  // processParameters(extractedContent);
 
   return 0;
 }
