@@ -99,70 +99,70 @@ int main(int argc, char** argv) {
   // TODO: Mehere Dateien verarbeiten
   string variableName = getFileNameWithoutExtension(files[0]);
 
-  // Auf Tags pruefen
-  if (fileContent.find("@start") != string::npos &&
-      fileContent.find("@end") != string::npos) {
-    string extractedContent =
-        extractContentBetweenTags(fileContent, "@start\n", "@end\n");
-    if (!extractedContent.empty()) {
-      // LOG(DEBUG) << "Content: \n" << extractedContent << endl;
-      vector<string> globales;
-      vector<string> variables;
-      vector<string> variablesText;
-      istringstream iss(extractedContent);
-      string line;
-      bool isComment = false;
-      string currentVariableContent = "";
-      while (getline(iss, line)) {
-        if (line.find("@global") != string::npos) {
-          size_t start = line.find('{');
-          size_t end = line.find('}');
-
-          if (start != std::string::npos && end != std::string::npos &&
-              start < end) {
-            // Extrahieren des Inhalts mit den geschweiften Klammern
-            std::string content = line.substr(start, end - start + 1);
-            processParameters(content);  // TODO: Parameter auswerten
-            globales.push_back(content);
-          }
-        }
-        if (line.find("@variable") != string::npos) {
-          size_t start = line.find('{');
-          size_t end = line.find('}');
-
-          if (start != std::string::npos && end != std::string::npos &&
-              start < end) {
-            // Extrahieren des Inhalts mit den geschweiften Klammern
-            std::string content = line.substr(start, end - start + 1);
-            processParameters(content);  // TODO: Parameter auswerten
-            variables.push_back(content);
-            isComment = true;
-          }
-        } else if (line.find("@endvariable") != string::npos) {
-          isComment = false;
-          variablesText.push_back(currentVariableContent);
-          currentVariableContent.clear();
-        } else if (isComment) {
-          currentVariableContent += line + " ";
-        }
-      }
-      for (auto& global : globales) {
-        LOG(DEBUG) << "Global: " << global << endl;
-      }
-      for (auto& variable : variables) {
-        LOG(DEBUG) << "Variable: " << variable << endl;
-      }
-      for (auto& text : variablesText) {
-        LOG(DEBUG) << "VariablesText: " << text << endl;
-      }
-      // processParameters(extractedContent);
-    } else {
-      LOG(ERROR) << "Keine Parameter gefunden!" << endl;
-    }
-  } else {
+  // Keine Tags vorhanden
+  if (!(fileContent.find("@start") != string::npos &&
+        fileContent.find("@end") != string::npos)) {
     LOG(INFO) << "Variable: " << variableName << endl;
     LOG(INFO) << "Inhalt: \n" << fileContent << endl;
+    return 0;
   }
+
+  string extractedContent =
+      extractContentBetweenTags(fileContent, "@start\n", "@end\n");
+  if (extractedContent.empty()) {
+    LOG(ERROR) << "Keine Parameter gefunden!" << endl;
+    return 1;
+  }
+
+  // LOG(DEBUG) << "Content: \n" << extractedContent << endl;
+  vector<string> globales;
+  vector<string> variables;
+  vector<string> variablesText;
+  istringstream iss(extractedContent);
+  string line;
+  bool isComment = false;
+  string currentVariableContent = "";
+  while (getline(iss, line)) {
+    if (line.find("@global") != string::npos) {
+      size_t start = line.find('{');
+      size_t end = line.find('}');
+
+      if (start != std::string::npos && end != std::string::npos &&
+          start < end) {
+        // Extrahieren des Inhalts mit den geschweiften Klammern
+        std::string content = line.substr(start, end - start + 1);
+        globales.push_back(content);
+      }
+    }
+    if (line.find("@variable") != string::npos) {
+      size_t start = line.find('{');
+      size_t end = line.find('}');
+
+      if (start != std::string::npos && end != std::string::npos &&
+          start < end) {
+        // Extrahieren des Inhalts mit den geschweiften Klammern
+        std::string content = line.substr(start, end - start + 1);
+        variables.push_back(content);
+        isComment = true;
+      }
+    } else if (line.find("@endvariable") != string::npos) {
+      isComment = false;
+      variablesText.push_back(currentVariableContent);
+      currentVariableContent.clear();
+    } else if (isComment) {
+      currentVariableContent += line + " ";
+    }
+  }
+  for (auto& global : globales) {
+    LOG(DEBUG) << "Global: " << global << endl;
+  }
+  for (auto& variable : variables) {
+    LOG(DEBUG) << "Variable: " << variable << endl;
+  }
+  for (auto& text : variablesText) {
+    LOG(DEBUG) << "VariablesText: " << text << endl;
+  }
+  // processParameters(extractedContent);
 
   return 0;
 }
