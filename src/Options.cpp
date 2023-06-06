@@ -78,7 +78,6 @@ void Options::parseOptions(int argc, char** argv) {
   // Get the fileNames
   for (int i = optind; i < argc; i++) {
     fileNames.push_back(argv[i]);
-    LOG(INFO) << "File: " << fileNames.back();
   }
 }
 

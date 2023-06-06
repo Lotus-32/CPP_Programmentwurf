@@ -102,8 +102,8 @@ int main(int argc, char** argv) {
     // Keine Tags vorhanden
     if (!(fileContent.find("@start") != string::npos &&
           fileContent.find("@end") != string::npos)) {
-      LOG(INFO) << "Variable: " << variableName << endl;
-      LOG(INFO) << "Inhalt: \n" << fileContent << endl;
+      LOG(DEBUG) << "Variable: " << variableName << endl;
+      LOG(DEBUG) << "Inhalt: \n" << fileContent << endl;
       continue;
     }
 
