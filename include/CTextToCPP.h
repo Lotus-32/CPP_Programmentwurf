@@ -2,7 +2,6 @@
 #define CTEXTTOCPP_H
 
 #include <string>
-#include <vector>
 
 using namespace std;
 
@@ -12,15 +11,16 @@ using namespace std;
  */
 class CTextToCPP {
  protected:
-  vector<string> elements;
+  CTextToCPP* next;
+  string text;
 
  public:
-  CTextToCPP();
+  CTextToCPP(string test);
   ~CTextToCPP();
 
   string writeDeclaration();
   string writeImplementation();
-  void addElement(const string& element);
+  void addElement(CTextToCPP& element);
   void sort();
   void clear();
 };

@@ -162,6 +162,16 @@ int main(int argc, char** argv) {
     for (auto& text : variablesText) {
       LOG(DEBUG) << "VariablesText: " << text << endl;
     }
+
+    CTextToCPP textToCPP = CTextToCPP("Das ist ein Test");
+    CTextToCPP textToCPP2 = CTextToCPP("Das ist ein Test2");
+    CTextToCPP textToCPP3 = CTextToCPP("Das ist ein Test3");
+
+    textToCPP.addElement(textToCPP2);
+    textToCPP.addElement(textToCPP3);
+    textToCPP.writeDeclaration();
+    textToCPP.clear();
+    textToCPP.writeDeclaration();
     // processParameters(extractedContent);
   }
 

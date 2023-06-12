@@ -1,10 +1,16 @@
 #include <CTextToCPP.h>
+#include <easylogging++.h>
 
 #include <algorithm>
 
-CTextToCPP::CTextToCPP() {}
+CTextToCPP::CTextToCPP(string test) {
+  text = test;
+  next = nullptr;
+}
 
-CTextToCPP::~CTextToCPP() {}
+CTextToCPP::~CTextToCPP() {
+  LOG(DEBUG) << "Destruktor CTextToCPP: " << text << endl;
+}
 
 /**
  * @brief Generates the content of a header file
@@ -13,11 +19,13 @@ CTextToCPP::~CTextToCPP() {}
  */
 string CTextToCPP::writeDeclaration() {
   // TODO: implement
-  string result = "";
-  for (string element : elements) {
-    result += element + "\n";
+
+  LOG(DEBUG) << "Text: " << text << endl;
+  if (next != nullptr) {
+    next->writeDeclaration();
   }
-  return result;
+
+  return "Declaration";
 }
 
 /**
@@ -36,21 +44,32 @@ string CTextToCPP::writeImplementation() {
  *
  * @param element Element to add
  */
-void CTextToCPP::addElement(const string& element) {
-  elements.push_back(element);
+void CTextToCPP::addElement(CTextToCPP& element) {
+  // Falls next nicht null ist
+  if (next != nullptr) {
+    // Füge das Element dem nächsten Element hinzu
+    next->addElement(element);
+  } else {
+    // Setze das nächste Element auf das übergebene Element
+    next = &element;
+  }
 }
-
 /**
  * @brief Sorts the elements
  *
  */
-void CTextToCPP::sort() { std::sort(elements.begin(), elements.end()); }
+void CTextToCPP::sort() {
+  // TODO: implement
+}
 
 /**
  * @brief Clears the elements
  *
  */
 void CTextToCPP::clear() {
-  elements.clear();
-  // TODO: Check if more memory management is needed
+  if (next != nullptr) {
+    next->clear();
+    delete next;
+    next = nullptr;
+  }
 }
