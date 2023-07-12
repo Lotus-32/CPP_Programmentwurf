@@ -1,5 +1,6 @@
 #include <CTextToCPP.h>
 #include <Options.h>
+#include <Variable.h>
 #include <easylogging++.h>
 #include <getopt.h>
 #include <jsoncpp/json/json.h>
@@ -59,7 +60,9 @@ string extractContentBetweenTags(const string& content, const string& startTag,
 }
 
 // TODO: Ueberarbeiten
-void processParameters(const string& parameters) {
+Variable* processVariableParams(const string& parameters, const string& text,
+                                const string& inputFileName,
+                                int* unnamedVarCount) {
   Json::Value json;
   Json::CharReaderBuilder readerBuilder;
   unique_ptr<Json::CharReader> reader(readerBuilder.newCharReader());
@@ -67,9 +70,19 @@ void processParameters(const string& parameters) {
 
   if (reader->parse(parameters.c_str(),
                     parameters.c_str() + parameters.length(), &json, &errors)) {
-    // LOG(DEBUG) << "Parameter: " << json.toStyledString() << endl;
+    string varname = json.get("varname", inputFileName).asString();
+    if (!json.isMember("varname")) {
+      transform(varname.begin(), varname.end(), varname.begin(), ::toupper);
+      varname += to_string((*unnamedVarCount)++);
+    }
+    return new Variable(varname, json.get("seq", "ESC").asString(),
+                        json.get("nl", "UNIX").asString(),
+                        json.get("addtextpos", false).asBool(),
+                        json.get("addtextsegment", false).asBool(),
+                        json.get("doxygen", "").asString(), text);
   } else {
     LOG(ERROR) << "Fehler beim Parsen der Parameter: " << errors << endl;
+    return nullptr;
   }
 }
 
@@ -156,14 +169,21 @@ int main(int argc, char** argv) {
     for (auto& global : globales) {
       LOG(DEBUG) << "Global: " << global << endl;
     }
-    for (auto& variable : variables) {
-      LOG(DEBUG) << "Variable: " << variable << endl;
-    }
-    for (auto& text : variablesText) {
-      LOG(DEBUG) << "VariablesText: " << text << endl;
+
+    int unnamedVariableCounter = 0;
+    for (int i = 0; i < variables.size(); i++) {
+      Variable* var =
+          processVariableParams(variables[i], variablesText[i], variableName,
+                                &unnamedVariableCounter);
+      if (var == nullptr) {
+        LOG(ERROR) << "Fehler beim Verarbeiten der Variable: " << variables[i]
+                   << endl;
+        cout << "Inkorrekte Parameter in der Datei: " << file << endl;
+        return 1;
+      }
     }
 
-    CTextToCPP textToCPP = CTextToCPP("Das ist ein Test");
+    /* CTextToCPP textToCPP = CTextToCPP("Das ist ein Test");
     CTextToCPP textToCPP2 = CTextToCPP("Das ist ein Test2");
     CTextToCPP textToCPP3 = CTextToCPP("Das ist ein Test3");
 
@@ -171,8 +191,7 @@ int main(int argc, char** argv) {
     textToCPP.addElement(textToCPP3);
     textToCPP.writeDeclaration();
     textToCPP.clear();
-    textToCPP.writeDeclaration();
-    // processParameters(extractedContent);
+    textToCPP.writeDeclaration(); */
   }
 
   return 0;
