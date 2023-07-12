@@ -5,6 +5,8 @@
 
 using namespace std;
 
+namespace Codegenerator {
+
 /**
  * @brief Base class for converting text to C or C++ code
  *
@@ -12,17 +14,25 @@ using namespace std;
 class CTextToCPP {
  protected:
   CTextToCPP* next;
+  string name;
+  string nl;
+  bool addtextpos;
+  bool addtextsegment;
+  string doxygen;
   string text;
 
  public:
-  CTextToCPP(string test);
-  ~CTextToCPP();
+  CTextToCPP(string name, string nl, bool addtextpos, bool addtextsegment,
+             string doxygen, string text);
+  virtual ~CTextToCPP();
 
-  string writeDeclaration();
-  string writeImplementation();
+  virtual string writeDeclaration();
+  virtual string writeImplementation();
   void addElement(CTextToCPP& element);
   void sort();
   void clear();
 };
+
+}  // namespace Codegenerator
 
 #endif

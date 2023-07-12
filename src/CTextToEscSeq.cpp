@@ -1,9 +1,15 @@
 #include <CTextToEscSeq.h>
 
-CTextToEscSeq::CTextToEscSeq() {}
+namespace Codegenerator {
+
+CTextToEscSeq::CTextToEscSeq(string name, string nl, bool addtextpos,
+                             bool addtextsegment, string doxygen, string text)
+    : CTextToCPP(name, nl, addtextpos, addtextsegment, doxygen, text) {}
 
 CTextToEscSeq::~CTextToEscSeq() {}
 
 string CTextToEscSeq::writeDeclaration() { return ""; }
 
 string CTextToEscSeq::writeImplementation() { return ""; }
+
+}  // namespace Codegenerator

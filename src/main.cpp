@@ -1,6 +1,6 @@
 #include <CTextToCPP.h>
+#include <CTextToEscSeq.h>
 #include <Options.h>
-#include <Variable.h>
 #include <easylogging++.h>
 #include <getopt.h>
 #include <jsoncpp/json/json.h>
@@ -59,10 +59,9 @@ string extractContentBetweenTags(const string& content, const string& startTag,
   return "";
 }
 
-// TODO: Ueberarbeiten
-Variable* processVariableParams(const string& parameters, const string& text,
-                                const string& inputFileName,
-                                int* unnamedVarCount) {
+CTextToCPP* processVariableParams(const string& parameters, const string& text,
+                                  const string& inputFileName,
+                                  int* unnamedVarCount) {
   Json::Value json;
   Json::CharReaderBuilder readerBuilder;
   unique_ptr<Json::CharReader> reader(readerBuilder.newCharReader());
@@ -75,11 +74,10 @@ Variable* processVariableParams(const string& parameters, const string& text,
       transform(varname.begin(), varname.end(), varname.begin(), ::toupper);
       varname += to_string((*unnamedVarCount)++);
     }
-    return new Variable(varname, json.get("seq", "ESC").asString(),
-                        json.get("nl", "UNIX").asString(),
-                        json.get("addtextpos", false).asBool(),
-                        json.get("addtextsegment", false).asBool(),
-                        json.get("doxygen", "").asString(), text);
+    return new CTextToEscSeq(varname, json.get("nl", "UNIX").asString(),
+                             json.get("addtextpos", false).asBool(),
+                             json.get("addtextsegment", false).asBool(),
+                             json.get("doxygen", "").asString(), text);
   } else {
     LOG(ERROR) << "Fehler beim Parsen der Parameter: " << errors << endl;
     return nullptr;
@@ -172,7 +170,7 @@ int main(int argc, char** argv) {
 
     int unnamedVariableCounter = 0;
     for (int i = 0; i < variables.size(); i++) {
-      Variable* var =
+      CTextToCPP* var =
           processVariableParams(variables[i], variablesText[i], variableName,
                                 &unnamedVariableCounter);
       if (var == nullptr) {
@@ -181,6 +179,8 @@ int main(int argc, char** argv) {
         cout << "Inkorrekte Parameter in der Datei: " << file << endl;
         return 1;
       }
+
+      // TODO: Variablen in CTo... stecken
     }
 
     /* CTextToCPP textToCPP = CTextToCPP("Das ist ein Test");

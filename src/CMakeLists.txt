@@ -3,11 +3,10 @@ add_library(
     ctexttocpp
     "${CMAKE_CURRENT_SOURCE_DIR}/Options.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/CTextToCPP.cpp" 
-    # "${CMAKE_CURRENT_SOURCE_DIR}/CTextToEscSeq.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/CTextToEscSeq.cpp"
     # "${CMAKE_CURRENT_SOURCE_DIR}/CTextToHexSeq.cpp"
     # "${CMAKE_CURRENT_SOURCE_DIR}/CTextToOctSeq.cpp"
     # "${CMAKE_CURRENT_SOURCE_DIR}/CTextToRawHexSeq.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Variable.cpp"
     # Add more source files here
 )
 

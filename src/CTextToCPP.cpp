@@ -3,9 +3,20 @@
 
 #include <algorithm>
 
-CTextToCPP::CTextToCPP(string test) {
-  text = test;
+namespace Codegenerator {
+
+CTextToCPP::CTextToCPP(string name, string nl, bool addtextpos,
+                       bool addtextsegment, string doxygen, string text)
+    : next(nullptr),
+      name(name),
+      nl(nl),
+      addtextpos(addtextpos),
+      addtextsegment(addtextsegment),
+      doxygen(doxygen),
+      text(text) {
   next = nullptr;
+  LOG(DEBUG) << "CTextToCPP: " << name << " " << nl << " " << addtextpos << " "
+             << addtextsegment << " " << doxygen << " " << text;
 }
 
 CTextToCPP::~CTextToCPP() {
@@ -73,3 +84,5 @@ void CTextToCPP::clear() {
   //   next = nullptr;
   // }
 }
+
+}  // namespace Codegenerator
