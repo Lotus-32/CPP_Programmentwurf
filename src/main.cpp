@@ -1,3 +1,4 @@
+#include <CCodegenerator.h>
 #include <CTextToCPP.h>
 #include <CTextToEscSeq.h>
 #include <CTextToHexSeq.h>
@@ -6,7 +7,6 @@
 #include <Options.h>
 #include <easylogging++.h>
 #include <getopt.h>
-#include <jsoncpp/json/json.h>
 #include <stdio.h>
 
 #include <fstream>
@@ -18,28 +18,8 @@ using namespace Codegenerator;
 
 INITIALIZE_EASYLOGGINGPP
 
-const string VAR_NAME = "varname";
-const string VAR_SEQENZ = "seq";
-const string VAR_NEWLINE = "nl";
-const string VAR_TEXTPOS = "addtextpos";
-const string VAR_TEXTSEGMENT = "addtextsegment";
-const string VAR_DOXYGEN = "doxygen";
-const string SEQENZ_ESC = "ESC";
-const string SEQENZ_HEX = "HEX";
-const string SEQENZ_OCT = "OCT";
-const string SEQENZ_RAWHEX = "RAWHEX";
-const string NL_DOS = "DOS";
-const string NL_UNIX = "UNIX";
-const string NL_MAC = "MAC";
-const string TAG_START = "@start";
-const string TAG_END = "@end";
-const string TAG_GLOBAL = "@global";
-const string TAG_VAR = "@variable";
-const string TAG_ENDVAR = "@endvariable";
-
 /**
- * @brief Initializes the logging system
- *
+ * This function initializes logging.
  */
 void initLogging() {
   // Laedt das Konfigurationsfile und konfiguriert die Logger
@@ -59,78 +39,6 @@ void initLogging() {
   // LOG(WARNING) << "Das Programm kann noch weiterlaufen";
   // LOG(ERROR) << "Das ist schon ein richtig schwerwiegender Fehler";
   // LOG(FATAL) << "Hier fehlt z.B. schon der Speicher um weiterzu machen";
-}
-
-string getFileNameWithoutExtension(const string& filename) {
-  char dot = filename.find_last_of(".");
-  char slash = filename.find_last_of("/");
-  if (dot != string::npos && dot > slash) {
-    return filename.substr(slash + 1, dot - slash - 1);
-  }
-  return filename;
-}
-
-string extractContentBetweenTags(const string& content, const string& startTag,
-                                 const string& endTag) {
-  int startPos = content.find(startTag);
-  int endPos = content.find(endTag);
-  if (startPos != string::npos && endPos != string::npos && startPos < endPos) {
-    startPos += startTag.length();
-    return content.substr(startPos, endPos - startPos);
-  }
-  return "";
-}
-
-CTextToCPP* processVariableParams(const string& parameters, const string& text,
-                                  const string& inputFileName,
-                                  int* unnamedVarCount) {
-  Json::Value json;
-  Json::CharReaderBuilder readerBuilder;
-  unique_ptr<Json::CharReader> reader(readerBuilder.newCharReader());
-  string errors;
-
-  if (reader->parse(parameters.c_str(),
-                    parameters.c_str() + parameters.length(), &json, &errors)) {
-    string varname = json.get(VAR_NAME, inputFileName).asString();
-    if (!json.isMember(VAR_NAME)) {
-      transform(varname.begin(), varname.end(), varname.begin(), ::toupper);
-      varname += to_string((*unnamedVarCount)++);
-    }
-    string sequenz = json.get(VAR_SEQENZ, "").asString();
-    if (sequenz == SEQENZ_ESC) {
-      return new CTextToEscSeq(varname, text,
-                               json.get(VAR_NEWLINE, NL_UNIX).asString(),
-                               json.get(VAR_TEXTPOS, false).asBool(),
-                               json.get(VAR_TEXTSEGMENT, false).asBool(),
-                               json.get(VAR_DOXYGEN, "").asString());
-    }
-    if (sequenz == SEQENZ_HEX) {
-      return new CTextToHexSeq(varname, text,
-                               json.get(VAR_NEWLINE, NL_UNIX).asString(),
-                               json.get(VAR_TEXTPOS, false).asBool(),
-                               json.get(VAR_TEXTSEGMENT, false).asBool(),
-                               json.get(VAR_DOXYGEN, "").asString());
-    }
-    if (sequenz == SEQENZ_OCT) {
-      return new CTextToOctSeq(varname, text,
-                               json.get(VAR_NEWLINE, NL_UNIX).asString(),
-                               json.get(VAR_TEXTPOS, false).asBool(),
-                               json.get(VAR_TEXTSEGMENT, false).asBool(),
-                               json.get(VAR_DOXYGEN, "").asString());
-    }
-    if (sequenz == SEQENZ_RAWHEX) {
-      return new CTextToRawHexSeq(varname, text,
-                                  json.get(VAR_NEWLINE, NL_UNIX).asString(),
-                                  json.get(VAR_TEXTPOS, false).asBool(),
-                                  json.get(VAR_TEXTSEGMENT, false).asBool(),
-                                  json.get(VAR_DOXYGEN, "").asString());
-    }
-    LOG(ERROR) << "Keine implementierte Sequenz" << errors << endl;
-    return nullptr;
-  } else {
-    LOG(ERROR) << "Fehler beim Parsen der Parameter: " << errors << endl;
-    return nullptr;
-  }
 }
 
 int main(int argc, char** argv) {
@@ -159,70 +67,13 @@ int main(int argc, char** argv) {
                        istreambuf_iterator<char>());
     inputFile.close();
 
-    string variableName = getFileNameWithoutExtension(file);
+    string* globales = new string();
+    CCodegenerator* codegenerator = new CCodegenerator();
+    codegenerator->processString(fileContent, file, textToCPP, globales);
 
-    // Keine Tags vorhanden
-    if (!(fileContent.find("@start") != string::npos &&
-          fileContent.find("@end") != string::npos)) {
-      textToCPP->addElement(new CTextToEscSeq(variableName, fileContent));
-      continue;
-    }
+    // ----Testausgaben---------------------------------------------------
 
-    string extractedContent =
-        extractContentBetweenTags(fileContent, "@start\n", "@end\n");
-    if (extractedContent.empty()) {
-      LOG(ERROR) << "Keine Parameter gefunden!" << endl;
-      continue;
-    }
-
-    vector<string> globales;
-
-    string variable_options;
-    string variable_text;
-    int unnamedVariableCounter = 0;
-
-    istringstream iss(extractedContent);
-    string line;
-    bool isComment = false;
-    string currentVariableContent = "";
-    while (getline(iss, line)) {
-      if (line.find(TAG_GLOBAL) != string::npos) {
-        size_t start = line.find('{');
-        size_t end = line.find('}');
-
-        if (start != std::string::npos && end != std::string::npos &&
-            start < end) {
-          // Extrahieren des Inhalts mit den geschweiften Klammern
-          std::string content = line.substr(start, end - start + 1);
-          globales.push_back(content);
-        }
-      }
-      if (line.find(TAG_VAR) != string::npos) {
-        size_t start = line.find('{');
-        size_t end = line.find('}');
-
-        if (start != std::string::npos && end != std::string::npos &&
-            start < end) {
-          // Extrahieren des Inhalts mit den geschweiften Klammern
-          std::string content = line.substr(start, end - start + 1);
-          variable_options = content;
-          isComment = true;
-        }
-      } else if (line.find(TAG_ENDVAR) != string::npos) {
-        isComment = false;
-        variable_text = currentVariableContent;
-        currentVariableContent.clear();
-        textToCPP->addElement(processVariableParams(variable_options,
-                                                    variable_text, variableName,
-                                                    &unnamedVariableCounter));
-
-      } else if (isComment) {
-        currentVariableContent += line + " ";
-      }
-    }
-    for (auto& global : globales) {
-      LOG(DEBUG) << "Global: " << global << endl;
-    }
+    LOG(INFO) << "Globale Variablen: \n" << *globales << endl;
 
     LOG(INFO) << "Inhalt: \n" << textToCPP->writeDeclaration() << endl;
     textToCPP->sort();
@@ -233,6 +84,11 @@ int main(int argc, char** argv) {
     textToCPP->sort();
     LOG(INFO) << "Inhalt nach sort: \n"
               << textToCPP->writeDeclaration() << endl;
+
+    // ----Ende:-Testausgaben---------------------------------------------------
+    delete codegenerator;
+    delete globales;
+    textToCPP->clear();
   }
   delete textToCPP;
 

@@ -7,6 +7,7 @@ add_library(
     "${CMAKE_CURRENT_SOURCE_DIR}/CTextToHexSeq.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/CTextToOctSeq.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/CTextToRawHexSeq.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/CCodegenerator.cpp"
     # Add more source files here
 )
 
