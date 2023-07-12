@@ -1,5 +1,8 @@
 #include <CTextToCPP.h>
 #include <CTextToEscSeq.h>
+#include <CTextToHexSeq.h>
+#include <CTextToOctSeq.h>
+#include <CTextToRawHexSeq.h>
 #include <Options.h>
 #include <easylogging++.h>
 #include <getopt.h>
@@ -74,10 +77,33 @@ CTextToCPP* processVariableParams(const string& parameters, const string& text,
       transform(varname.begin(), varname.end(), varname.begin(), ::toupper);
       varname += to_string((*unnamedVarCount)++);
     }
-    return new CTextToEscSeq(varname, json.get("nl", "UNIX").asString(),
-                             json.get("addtextpos", false).asBool(),
-                             json.get("addtextsegment", false).asBool(),
-                             json.get("doxygen", "").asString(), text);
+    string sequenz = json.get("seq", "").asString();
+    if (sequenz == "ESC") {
+      return new CTextToEscSeq(varname, json.get("nl", "UNIX").asString(),
+                               json.get("addtextpos", false).asBool(),
+                               json.get("addtextsegment", false).asBool(),
+                               json.get("doxygen", "").asString(), text);
+    }
+    if (sequenz == "HEX") {
+      return new CTextToHexSeq(varname, json.get("nl", "UNIX").asString(),
+                               json.get("addtextpos", false).asBool(),
+                               json.get("addtextsegment", false).asBool(),
+                               json.get("doxygen", "").asString(), text);
+    }
+    if (sequenz == "OCT") {
+      return new CTextToOctSeq(varname, json.get("nl", "UNIX").asString(),
+                               json.get("addtextpos", false).asBool(),
+                               json.get("addtextsegment", false).asBool(),
+                               json.get("doxygen", "").asString(), text);
+    }
+    if (sequenz == "RAWHEX") {
+      return new CTextToRawHexSeq(varname, json.get("nl", "UNIX").asString(),
+                                  json.get("addtextpos", false).asBool(),
+                                  json.get("addtextsegment", false).asBool(),
+                                  json.get("doxygen", "").asString(), text);
+    }
+    LOG(ERROR) << "Keine implementierte Sequenz" << errors << endl;
+    return nullptr;
   } else {
     LOG(ERROR) << "Fehler beim Parsen der Parameter: " << errors << endl;
     return nullptr;

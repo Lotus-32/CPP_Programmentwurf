@@ -1,5 +1,4 @@
 #include <CTextToCPP.h>
-#include <easylogging++.h>
 
 #include <algorithm>
 
@@ -15,8 +14,6 @@ CTextToCPP::CTextToCPP(string name, string nl, bool addtextpos,
       doxygen(doxygen),
       text(text) {
   next = nullptr;
-  LOG(DEBUG) << "CTextToCPP: " << name << " " << nl << " " << addtextpos << " "
-             << addtextsegment << " " << doxygen << " " << text;
 }
 
 CTextToCPP::~CTextToCPP() {

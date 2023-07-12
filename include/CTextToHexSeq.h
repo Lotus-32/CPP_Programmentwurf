@@ -3,13 +3,18 @@
 
 #include <CTextToCPP.h>
 
+namespace Codegenerator {
+
 class CTextToHexSeq : public CTextToCPP {
  public:
-  CTextToHexSeq();
+  CTextToHexSeq(string name, string nl, bool addtextpos, bool addtextsegment,
+                string doxygen, string text);
   ~CTextToHexSeq();
 
-  string writeDeclaration();
-  string writeImplementation();
+  string writeDeclaration() override;
+  string writeImplementation() override;
 };
+
+}  // namespace Codegenerator
 
 #endif

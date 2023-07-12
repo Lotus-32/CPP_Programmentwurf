@@ -1,6 +1,8 @@
 #ifndef CTEXTTOCPP_H
 #define CTEXTTOCPP_H
 
+#include <easylogging++.h>
+
 #include <string>
 
 using namespace std;
