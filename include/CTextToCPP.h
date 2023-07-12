@@ -32,6 +32,11 @@ class CTextToCPP {
   void addElement(CTextToCPP* element);
   void sort();
   void clear();
+
+  string getName() const;
+
+ private:
+  void insert(CTextToCPP*& sortedList, CTextToCPP* newElement);
 };
 
 }  // namespace Codegenerator

@@ -21,9 +21,9 @@ CTextToOctSeq::~CTextToOctSeq() {}
 
 string CTextToOctSeq::writeDeclaration() {
   if (next != nullptr) {
-    return text + "\n" + next->writeDeclaration();
+    return name + "\n" + next->writeDeclaration();
   }
-  return text;
+  return name;
 }
 
 string CTextToOctSeq::writeImplementation() { return ""; }

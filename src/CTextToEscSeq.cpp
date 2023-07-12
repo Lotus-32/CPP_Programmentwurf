@@ -22,9 +22,9 @@ CTextToEscSeq::~CTextToEscSeq() {}
 
 string CTextToEscSeq::writeDeclaration() {
   if (next != nullptr) {
-    return text + "\n" + next->writeDeclaration();
+    return name + "\n" + next->writeDeclaration();
   }
-  return text;
+  return name;
 }
 
 string CTextToEscSeq::writeImplementation() { return ""; }

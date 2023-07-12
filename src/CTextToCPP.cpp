@@ -32,7 +32,7 @@ string CTextToCPP::writeImplementation() {
 /**
  * @brief Adds an element to the concatenation
  *
- * @param element Element to add
+ * @param element The element to add
  */
 void CTextToCPP::addElement(CTextToCPP* element) {
   // Falls next nicht null ist
@@ -45,11 +45,49 @@ void CTextToCPP::addElement(CTextToCPP* element) {
   }
 }
 /**
- * @brief Sorts the elements
+ * @brief Sorts the elements by name with insertion sort
  *
  */
 void CTextToCPP::sort() {
-  // TODO: implement
+  if (next == nullptr) {
+    return;
+  }
+
+  CTextToCPP* sortedList = nullptr;
+  CTextToCPP* current = next;
+
+  while (current != nullptr) {
+    CTextToCPP* nextElement = current->next;
+    insert(sortedList, current);
+    current = nextElement;
+  }
+  next = sortedList;
+}
+
+/**
+ * The function inserts a new element into a sorted linked list based on the
+ * element's name.
+ *
+ * @param sortedList A pointer to the head of a sorted linked list of CTextToCPP
+ * objects.
+ * @param newElement A pointer to the element that sould be inserted into the
+ * list.
+ */
+void CTextToCPP::insert(CTextToCPP*& sortedList, CTextToCPP* newElement) {
+  if (sortedList == nullptr || newElement->getName() < sortedList->getName()) {
+    newElement->next = sortedList;
+    sortedList = newElement;
+  } else {
+    CTextToCPP* current = sortedList;
+
+    while (current->next != nullptr &&
+           current->next->getName() < newElement->getName()) {
+      current = current->next;
+    }
+
+    newElement->next = current->next;
+    current->next = newElement;
+  }
 }
 
 /**
@@ -63,5 +101,12 @@ void CTextToCPP::clear() {
     next = nullptr;
   }
 }
+
+/**
+ * The function `getName` returns the value of the `name` variable as a string.
+ *
+ * @return the value of the variable "name".
+ */
+string CTextToCPP::getName() const { return name; }
 
 }  // namespace Codegenerator

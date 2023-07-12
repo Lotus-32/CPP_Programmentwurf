@@ -225,9 +225,13 @@ int main(int argc, char** argv) {
     }
 
     LOG(INFO) << "Inhalt: \n" << textToCPP->writeDeclaration() << endl;
-    textToCPP->clear();
-    textToCPP->addElement(new CTextToEscSeq("Test", "Hallo Welt!"));
-    LOG(INFO) << "Inhalt nach clear: \n"
+    textToCPP->sort();
+    LOG(INFO) << "Inhalt nach sort: \n"
+              << textToCPP->writeDeclaration() << endl;
+    textToCPP->addElement(new CTextToEscSeq("Test", "Hallo Welt"));
+    textToCPP->addElement(new CTextToHexSeq("Ann den Anfang", "Hallo Welt"));
+    textToCPP->sort();
+    LOG(INFO) << "Inhalt nach sort: \n"
               << textToCPP->writeDeclaration() << endl;
   }
   delete textToCPP;

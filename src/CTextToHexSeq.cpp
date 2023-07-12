@@ -21,9 +21,9 @@ CTextToHexSeq::~CTextToHexSeq() {}
 
 string CTextToHexSeq::writeDeclaration() {
   if (next != nullptr) {
-    return text + "\n" + next->writeDeclaration();
+    return name + "\n" + next->writeDeclaration();
   }
-  return text;
+  return name;
 }
 
 string CTextToHexSeq::writeImplementation() { return ""; }
