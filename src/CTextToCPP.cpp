@@ -67,9 +67,9 @@ void CTextToCPP::sort() {
  *
  */
 void CTextToCPP::clear() {
-  if (next != nullptr) {
-    next->clear();
-    delete next;
-    next = nullptr;
-  }
+  // if (next != nullptr) {
+  //   next->clear();
+  //   delete next;
+  //   next = nullptr;
+  // }
 }
