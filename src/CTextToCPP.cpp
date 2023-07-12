@@ -4,36 +4,21 @@
 
 namespace Codegenerator {
 
-CTextToCPP::CTextToCPP(string name, string text, string nl, bool addtextpos,
-                       bool addtextsegment, string doxygen)
-    : next(nullptr),
-      text(text),
-      name(name),
-      nl(nl),
-      addtextpos(addtextpos),
-      addtextsegment(addtextsegment),
-      doxygen(doxygen) {}
+CTextToCPP::CTextToCPP() : next(nullptr) {}
 
 CTextToCPP::~CTextToCPP() {
   clear();
   LOG(DEBUG) << "Destruktor: " << name << endl;
 }
 
+bool CTextToCPP::hasNext() { return next != nullptr; }
+
 /**
  * @brief Generates the content of a header file
  *
  * @return string Content of the header file
  */
-string CTextToCPP::writeDeclaration() {
-  // TODO: implement
-
-  LOG(DEBUG) << "Text: " << text << endl;
-  if (next != nullptr) {
-    next->writeDeclaration();
-  }
-
-  return "Declaration";
-}
+string CTextToCPP::writeDeclaration() { return next->writeDeclaration(); }
 
 /**
  * @brief Generates the content of a source file

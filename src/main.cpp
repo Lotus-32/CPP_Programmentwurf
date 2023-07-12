@@ -141,7 +141,7 @@ int main(int argc, char** argv) {
 
   vector<string> files = options.getFileNames();
 
-  CTextToCPP* textToCPP = nullptr;
+  CTextToCPP* textToCPP = new CTextToCPP();
 
   // Start of Codegenerator ---------------------------------------------
 
@@ -164,7 +164,7 @@ int main(int argc, char** argv) {
     // Keine Tags vorhanden
     if (!(fileContent.find("@start") != string::npos &&
           fileContent.find("@end") != string::npos)) {
-      textToCPP = new CTextToEscSeq(variableName, fileContent);
+      textToCPP->addElement(new CTextToEscSeq(variableName, fileContent));
       continue;
     }
 
@@ -212,15 +212,9 @@ int main(int argc, char** argv) {
         isComment = false;
         variable_text = currentVariableContent;
         currentVariableContent.clear();
-        if (textToCPP == nullptr) {
-          textToCPP =
-              processVariableParams(variable_options, variable_text,
-                                    variableName, &unnamedVariableCounter);
-        } else {
-          textToCPP->addElement(
-              processVariableParams(variable_options, variable_text,
-                                    variableName, &unnamedVariableCounter));
-        }
+        textToCPP->addElement(processVariableParams(variable_options,
+                                                    variable_text, variableName,
+                                                    &unnamedVariableCounter));
 
       } else if (isComment) {
         currentVariableContent += line + " ";
@@ -230,19 +224,12 @@ int main(int argc, char** argv) {
       LOG(DEBUG) << "Global: " << global << endl;
     }
 
-    if (textToCPP != nullptr) {
-      LOG(INFO) << "Inhalt: \n" << textToCPP->writeDeclaration() << endl;
-      textToCPP->clear();
-      LOG(INFO) << "Inhalt nach clear: \n"
-                << textToCPP->writeDeclaration() << endl;
-    }
-    delete textToCPP;
+    LOG(INFO) << "Inhalt: \n" << textToCPP->writeDeclaration() << endl;
+    textToCPP->clear();
+    textToCPP->addElement(new CTextToEscSeq("Test", "Hallo Welt!"));
+    LOG(INFO) << "Inhalt nach clear: \n"
+              << textToCPP->writeDeclaration() << endl;
   }
-
-  LOG(INFO) << "Inhalt: \n" << textToCPP->writeDeclaration() << endl;
-  textToCPP->clear();
-  LOG(INFO) << "Inhalt nach clear: \n" << textToCPP->writeDeclaration() << endl;
-
   delete textToCPP;
 
   return 0;

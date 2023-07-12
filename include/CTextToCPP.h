@@ -24,10 +24,9 @@ class CTextToCPP {
   string text;
 
  public:
-  CTextToCPP(string name, string text, string nl = "UNIX",
-             bool addtextpos = false, bool addtextsegment = false,
-             string doxygen = "");
+  CTextToCPP();
   virtual ~CTextToCPP();
+  bool hasNext();
 
   virtual string writeDeclaration();
   virtual string writeImplementation();
