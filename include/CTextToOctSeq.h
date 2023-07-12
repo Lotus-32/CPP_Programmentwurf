@@ -7,8 +7,9 @@ namespace Codegenerator {
 
 class CTextToOctSeq : public CTextToCPP {
  public:
-  CTextToOctSeq(string name, string nl, bool addtextpos, bool addtextsegment,
-                string doxygen, string text);
+  CTextToOctSeq(string name, string text, string nl = "UNIX",
+                bool addtextpos = false, bool addtextsegment = false,
+                string doxygen = "");
   ~CTextToOctSeq();
 
   string writeDeclaration() override;

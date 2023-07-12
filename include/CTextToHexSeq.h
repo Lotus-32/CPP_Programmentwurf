@@ -7,8 +7,9 @@ namespace Codegenerator {
 
 class CTextToHexSeq : public CTextToCPP {
  public:
-  CTextToHexSeq(string name, string nl, bool addtextpos, bool addtextsegment,
-                string doxygen, string text);
+  CTextToHexSeq(string name, string text, string nl = "UNIX",
+                bool addtextpos = false, bool addtextsegment = false,
+                string doxygen = "");
   ~CTextToHexSeq();
 
   string writeDeclaration() override;

@@ -4,20 +4,21 @@
 
 namespace Codegenerator {
 
-CTextToCPP::CTextToCPP(string name, string nl, bool addtextpos,
-                       bool addtextsegment, string doxygen, string text)
+CTextToCPP::CTextToCPP(string name, string text, string nl, bool addtextpos,
+                       bool addtextsegment, string doxygen)
     : next(nullptr),
+      text(text),
       name(name),
       nl(nl),
       addtextpos(addtextpos),
       addtextsegment(addtextsegment),
-      doxygen(doxygen),
-      text(text) {
+      doxygen(doxygen) {
   next = nullptr;
 }
 
 CTextToCPP::~CTextToCPP() {
-  LOG(DEBUG) << "Destruktor CTextToCPP: " << text << endl;
+  clear();
+  LOG(DEBUG) << "Destruktor: " << name << endl;
 }
 
 /**
@@ -52,14 +53,14 @@ string CTextToCPP::writeImplementation() {
  *
  * @param element Element to add
  */
-void CTextToCPP::addElement(CTextToCPP& element) {
+void CTextToCPP::addElement(CTextToCPP* element) {
   // Falls next nicht null ist
   if (next != nullptr) {
     // Füge das Element dem nächsten Element hinzu
     next->addElement(element);
   } else {
     // Setze das nächste Element auf das übergebene Element
-    next = &element;
+    next = element;
   }
 }
 /**
@@ -75,11 +76,11 @@ void CTextToCPP::sort() {
  *
  */
 void CTextToCPP::clear() {
-  // if (next != nullptr) {
-  //   next->clear();
-  //   delete next;
-  //   next = nullptr;
-  // }
+  if (next != nullptr) {
+    next->clear();
+    delete next;
+    next = nullptr;
+  }
 }
 
 }  // namespace Codegenerator

@@ -7,8 +7,9 @@ namespace Codegenerator {
 
 class CTextToRawHexSeq : public CTextToCPP {
  public:
-  CTextToRawHexSeq(string name, string nl, bool addtextpos, bool addtextsegment,
-                   string doxygen, string text);
+  CTextToRawHexSeq(string name, string text, string nl = "UNIX",
+                   bool addtextpos = false, bool addtextsegment = false,
+                   string doxygen = "");
   ~CTextToRawHexSeq();
 
   string writeDeclaration() override;

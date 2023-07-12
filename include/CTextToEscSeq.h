@@ -7,8 +7,9 @@ namespace Codegenerator {
 
 class CTextToEscSeq : public CTextToCPP {
  public:
-  CTextToEscSeq(string name, string nl, bool addtextpos, bool addtextsegment,
-                string doxygen, string text);
+  CTextToEscSeq(string name, string text, string nl = "UNIX",
+                bool addtextpos = false, bool addtextsegment = false,
+                string doxygen = "");
   ~CTextToEscSeq();
 
   string writeDeclaration() override;

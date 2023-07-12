@@ -2,16 +2,23 @@
 
 namespace Codegenerator {
 
-CTextToHexSeq::CTextToHexSeq(string name, string nl, bool addtextpos,
-                             bool addtextsegment, string doxygen, string text)
-    : CTextToCPP(name, nl, addtextpos, addtextsegment, doxygen, text) {
+CTextToHexSeq::CTextToHexSeq(string name, string text, string nl,
+                             bool addtextpos, bool addtextsegment,
+                             string doxygen)
+    : CTextToCPP(name, text, nl, addtextpos, addtextsegment, doxygen) {
   LOG(DEBUG) << "CTextToHexSeq: " << name << " " << nl << " " << addtextpos
-             << " " << addtextsegment << " " << doxygen << " " << text;
+             << " " << addtextsegment << " " << doxygen << "\n"
+             << text;
 }
 
 CTextToHexSeq::~CTextToHexSeq() {}
 
-string CTextToHexSeq::writeDeclaration() { return ""; }
+string CTextToHexSeq::writeDeclaration() {
+  if (next != nullptr) {
+    return text + "\n" + next->writeDeclaration();
+  }
+  return text;
+}
 
 string CTextToHexSeq::writeImplementation() { return ""; }
 

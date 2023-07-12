@@ -98,32 +98,32 @@ CTextToCPP* processVariableParams(const string& parameters, const string& text,
     }
     string sequenz = json.get(VAR_SEQENZ, "").asString();
     if (sequenz == SEQENZ_ESC) {
-      return new CTextToEscSeq(varname,
+      return new CTextToEscSeq(varname, text,
                                json.get(VAR_NEWLINE, NL_UNIX).asString(),
                                json.get(VAR_TEXTPOS, false).asBool(),
                                json.get(VAR_TEXTSEGMENT, false).asBool(),
-                               json.get(VAR_DOXYGEN, "").asString(), text);
+                               json.get(VAR_DOXYGEN, "").asString());
     }
     if (sequenz == SEQENZ_HEX) {
-      return new CTextToHexSeq(varname,
+      return new CTextToHexSeq(varname, text,
                                json.get(VAR_NEWLINE, NL_UNIX).asString(),
                                json.get(VAR_TEXTPOS, false).asBool(),
                                json.get(VAR_TEXTSEGMENT, false).asBool(),
-                               json.get(VAR_DOXYGEN, "").asString(), text);
+                               json.get(VAR_DOXYGEN, "").asString());
     }
     if (sequenz == SEQENZ_OCT) {
-      return new CTextToOctSeq(varname,
+      return new CTextToOctSeq(varname, text,
                                json.get(VAR_NEWLINE, NL_UNIX).asString(),
                                json.get(VAR_TEXTPOS, false).asBool(),
                                json.get(VAR_TEXTSEGMENT, false).asBool(),
-                               json.get(VAR_DOXYGEN, "").asString(), text);
+                               json.get(VAR_DOXYGEN, "").asString());
     }
     if (sequenz == SEQENZ_RAWHEX) {
-      return new CTextToRawHexSeq(varname,
+      return new CTextToRawHexSeq(varname, text,
                                   json.get(VAR_NEWLINE, NL_UNIX).asString(),
                                   json.get(VAR_TEXTPOS, false).asBool(),
                                   json.get(VAR_TEXTSEGMENT, false).asBool(),
-                                  json.get(VAR_DOXYGEN, "").asString(), text);
+                                  json.get(VAR_DOXYGEN, "").asString());
     }
     LOG(ERROR) << "Keine implementierte Sequenz" << errors << endl;
     return nullptr;
@@ -164,9 +164,7 @@ int main(int argc, char** argv) {
     // Keine Tags vorhanden
     if (!(fileContent.find("@start") != string::npos &&
           fileContent.find("@end") != string::npos)) {
-      // TODO: CTo...
-      LOG(DEBUG) << "Variable: " << variableName << endl;
-      LOG(DEBUG) << "Inhalt: \n" << fileContent << endl;
+      textToCPP = new CTextToEscSeq(variableName, fileContent);
       continue;
     }
 
@@ -177,10 +175,11 @@ int main(int argc, char** argv) {
       continue;
     }
 
-    // LOG(DEBUG) << "Content: \n" << extractedContent << endl;
     vector<string> globales;
-    vector<string> variables;
-    vector<string> variablesText;
+
+    string variable_options;
+    string variable_text;
+    int unnamedVariableCounter = 0;
 
     istringstream iss(extractedContent);
     string line;
@@ -206,13 +205,23 @@ int main(int argc, char** argv) {
             start < end) {
           // Extrahieren des Inhalts mit den geschweiften Klammern
           std::string content = line.substr(start, end - start + 1);
-          variables.push_back(content);
+          variable_options = content;
           isComment = true;
         }
       } else if (line.find(TAG_ENDVAR) != string::npos) {
         isComment = false;
-        variablesText.push_back(currentVariableContent);
+        variable_text = currentVariableContent;
         currentVariableContent.clear();
+        if (textToCPP == nullptr) {
+          textToCPP =
+              processVariableParams(variable_options, variable_text,
+                                    variableName, &unnamedVariableCounter);
+        } else {
+          textToCPP->addElement(
+              processVariableParams(variable_options, variable_text,
+                                    variableName, &unnamedVariableCounter));
+        }
+
       } else if (isComment) {
         currentVariableContent += line + " ";
       }
@@ -221,31 +230,14 @@ int main(int argc, char** argv) {
       LOG(DEBUG) << "Global: " << global << endl;
     }
 
-    int unnamedVariableCounter = 0;
-    for (int i = 0; i < variables.size(); i++) {
-      CTextToCPP* var =
-          processVariableParams(variables[i], variablesText[i], variableName,
-                                &unnamedVariableCounter);
-      if (var == nullptr) {
-        LOG(ERROR) << "Fehler beim Verarbeiten der Variable: " << variables[i]
-                   << endl;
-        cout << "Inkorrekte Parameter in der Datei: " << file << endl;
-        return 1;
-      }
-
-      // TODO: Variablen in CTo... stecken
+    if (textToCPP != nullptr) {
+      LOG(INFO) << "Inhalt: \n" << textToCPP->writeDeclaration() << endl;
+      textToCPP->clear();
+      delete textToCPP;
     }
-
-    /* CTextToCPP textToCPP = CTextToCPP("Das ist ein Test");
-    CTextToCPP textToCPP2 = CTextToCPP("Das ist ein Test2");
-    CTextToCPP textToCPP3 = CTextToCPP("Das ist ein Test3");
-
-    textToCPP.addElement(textToCPP2);
-    textToCPP.addElement(textToCPP3);
-    textToCPP.writeDeclaration();
-    textToCPP.clear();
-    textToCPP.writeDeclaration(); */
   }
+
+  delete textToCPP;
 
   return 0;
 }
