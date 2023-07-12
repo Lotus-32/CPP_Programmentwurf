@@ -233,9 +233,15 @@ int main(int argc, char** argv) {
     if (textToCPP != nullptr) {
       LOG(INFO) << "Inhalt: \n" << textToCPP->writeDeclaration() << endl;
       textToCPP->clear();
-      delete textToCPP;
+      LOG(INFO) << "Inhalt nach clear: \n"
+                << textToCPP->writeDeclaration() << endl;
     }
+    delete textToCPP;
   }
+
+  LOG(INFO) << "Inhalt: \n" << textToCPP->writeDeclaration() << endl;
+  textToCPP->clear();
+  LOG(INFO) << "Inhalt nach clear: \n" << textToCPP->writeDeclaration() << endl;
 
   delete textToCPP;
 

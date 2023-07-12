@@ -12,9 +12,7 @@ CTextToCPP::CTextToCPP(string name, string text, string nl, bool addtextpos,
       nl(nl),
       addtextpos(addtextpos),
       addtextsegment(addtextsegment),
-      doxygen(doxygen) {
-  next = nullptr;
-}
+      doxygen(doxygen) {}
 
 CTextToCPP::~CTextToCPP() {
   clear();
