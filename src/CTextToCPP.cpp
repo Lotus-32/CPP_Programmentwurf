@@ -11,8 +11,6 @@ CTextToCPP::~CTextToCPP() {
   LOG(DEBUG) << "Destruktor: " << name << endl;
 }
 
-bool CTextToCPP::hasNext() { return next != nullptr; }
-
 /**
  * @brief Generates the content of a header file
  *

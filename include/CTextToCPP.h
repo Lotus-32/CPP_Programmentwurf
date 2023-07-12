@@ -26,7 +26,6 @@ class CTextToCPP {
  public:
   CTextToCPP();
   virtual ~CTextToCPP();
-  bool hasNext();
 
   virtual string writeDeclaration();
   virtual string writeImplementation();
