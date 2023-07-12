@@ -18,6 +18,25 @@ using namespace Codegenerator;
 
 INITIALIZE_EASYLOGGINGPP
 
+const string VAR_NAME = "varname";
+const string VAR_SEQENZ = "seq";
+const string VAR_NEWLINE = "nl";
+const string VAR_TEXTPOS = "addtextpos";
+const string VAR_TEXTSEGMENT = "addtextsegment";
+const string VAR_DOXYGEN = "doxygen";
+const string SEQENZ_ESC = "ESC";
+const string SEQENZ_HEX = "HEX";
+const string SEQENZ_OCT = "OCT";
+const string SEQENZ_RAWHEX = "RAWHEX";
+const string NL_DOS = "DOS";
+const string NL_UNIX = "UNIX";
+const string NL_MAC = "MAC";
+const string TAG_START = "@start";
+const string TAG_END = "@end";
+const string TAG_GLOBAL = "@global";
+const string TAG_VAR = "@variable";
+const string TAG_ENDVAR = "@endvariable";
+
 /**
  * @brief Initializes the logging system
  *
@@ -72,35 +91,39 @@ CTextToCPP* processVariableParams(const string& parameters, const string& text,
 
   if (reader->parse(parameters.c_str(),
                     parameters.c_str() + parameters.length(), &json, &errors)) {
-    string varname = json.get("varname", inputFileName).asString();
-    if (!json.isMember("varname")) {
+    string varname = json.get(VAR_NAME, inputFileName).asString();
+    if (!json.isMember(VAR_NAME)) {
       transform(varname.begin(), varname.end(), varname.begin(), ::toupper);
       varname += to_string((*unnamedVarCount)++);
     }
-    string sequenz = json.get("seq", "").asString();
-    if (sequenz == "ESC") {
-      return new CTextToEscSeq(varname, json.get("nl", "UNIX").asString(),
-                               json.get("addtextpos", false).asBool(),
-                               json.get("addtextsegment", false).asBool(),
-                               json.get("doxygen", "").asString(), text);
+    string sequenz = json.get(VAR_SEQENZ, "").asString();
+    if (sequenz == SEQENZ_ESC) {
+      return new CTextToEscSeq(varname,
+                               json.get(VAR_NEWLINE, NL_UNIX).asString(),
+                               json.get(VAR_TEXTPOS, false).asBool(),
+                               json.get(VAR_TEXTSEGMENT, false).asBool(),
+                               json.get(VAR_DOXYGEN, "").asString(), text);
     }
-    if (sequenz == "HEX") {
-      return new CTextToHexSeq(varname, json.get("nl", "UNIX").asString(),
-                               json.get("addtextpos", false).asBool(),
-                               json.get("addtextsegment", false).asBool(),
-                               json.get("doxygen", "").asString(), text);
+    if (sequenz == SEQENZ_HEX) {
+      return new CTextToHexSeq(varname,
+                               json.get(VAR_NEWLINE, NL_UNIX).asString(),
+                               json.get(VAR_TEXTPOS, false).asBool(),
+                               json.get(VAR_TEXTSEGMENT, false).asBool(),
+                               json.get(VAR_DOXYGEN, "").asString(), text);
     }
-    if (sequenz == "OCT") {
-      return new CTextToOctSeq(varname, json.get("nl", "UNIX").asString(),
-                               json.get("addtextpos", false).asBool(),
-                               json.get("addtextsegment", false).asBool(),
-                               json.get("doxygen", "").asString(), text);
+    if (sequenz == SEQENZ_OCT) {
+      return new CTextToOctSeq(varname,
+                               json.get(VAR_NEWLINE, NL_UNIX).asString(),
+                               json.get(VAR_TEXTPOS, false).asBool(),
+                               json.get(VAR_TEXTSEGMENT, false).asBool(),
+                               json.get(VAR_DOXYGEN, "").asString(), text);
     }
-    if (sequenz == "RAWHEX") {
-      return new CTextToRawHexSeq(varname, json.get("nl", "UNIX").asString(),
-                                  json.get("addtextpos", false).asBool(),
-                                  json.get("addtextsegment", false).asBool(),
-                                  json.get("doxygen", "").asString(), text);
+    if (sequenz == SEQENZ_RAWHEX) {
+      return new CTextToRawHexSeq(varname,
+                                  json.get(VAR_NEWLINE, NL_UNIX).asString(),
+                                  json.get(VAR_TEXTPOS, false).asBool(),
+                                  json.get(VAR_TEXTSEGMENT, false).asBool(),
+                                  json.get(VAR_DOXYGEN, "").asString(), text);
     }
     LOG(ERROR) << "Keine implementierte Sequenz" << errors << endl;
     return nullptr;
@@ -117,6 +140,8 @@ int main(int argc, char** argv) {
   options.parseOptions(argc, argv);
 
   vector<string> files = options.getFileNames();
+
+  CTextToCPP* textToCPP = nullptr;
 
   // Start of Codegenerator ---------------------------------------------
 
@@ -139,6 +164,7 @@ int main(int argc, char** argv) {
     // Keine Tags vorhanden
     if (!(fileContent.find("@start") != string::npos &&
           fileContent.find("@end") != string::npos)) {
+      // TODO: CTo...
       LOG(DEBUG) << "Variable: " << variableName << endl;
       LOG(DEBUG) << "Inhalt: \n" << fileContent << endl;
       continue;
@@ -155,12 +181,13 @@ int main(int argc, char** argv) {
     vector<string> globales;
     vector<string> variables;
     vector<string> variablesText;
+
     istringstream iss(extractedContent);
     string line;
     bool isComment = false;
     string currentVariableContent = "";
     while (getline(iss, line)) {
-      if (line.find("@global") != string::npos) {
+      if (line.find(TAG_GLOBAL) != string::npos) {
         size_t start = line.find('{');
         size_t end = line.find('}');
 
@@ -171,7 +198,7 @@ int main(int argc, char** argv) {
           globales.push_back(content);
         }
       }
-      if (line.find("@variable") != string::npos) {
+      if (line.find(TAG_VAR) != string::npos) {
         size_t start = line.find('{');
         size_t end = line.find('}');
 
@@ -182,7 +209,7 @@ int main(int argc, char** argv) {
           variables.push_back(content);
           isComment = true;
         }
-      } else if (line.find("@endvariable") != string::npos) {
+      } else if (line.find(TAG_ENDVAR) != string::npos) {
         isComment = false;
         variablesText.push_back(currentVariableContent);
         currentVariableContent.clear();
