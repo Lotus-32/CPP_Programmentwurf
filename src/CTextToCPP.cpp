@@ -6,10 +6,7 @@ namespace Codegenerator {
 
 CTextToCPP::CTextToCPP() : next(nullptr) {}
 
-CTextToCPP::~CTextToCPP() {
-  clear();
-  LOG(DEBUG) << "Destruktor: " << name << endl;
-}
+CTextToCPP::~CTextToCPP() { clear(); }
 
 /**
  * @brief Generates the content of a header file

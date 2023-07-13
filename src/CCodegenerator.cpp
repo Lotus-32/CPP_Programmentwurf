@@ -148,15 +148,20 @@ void CCodegenerator::processString(const string &fileContent,
         isComment = true;
       }
     } else if (line.find(TAG_ENDVAR) != string::npos) {
+      if (!currentVariableContent.empty() &&
+          currentVariableContent.back() == '\n') {
+        currentVariableContent.pop_back();
+      }
       isComment = false;
       variable_text = currentVariableContent;
+      LOG(DEBUG) << "Variablen Inhalt: " << variable_text << endl;
       currentVariableContent.clear();
       extractedTextToCPP->addElement(processVariableParams(
           variable_options, variable_text, fileNameWithoutExt,
           &unnamedVariableCounter, lineNumber));
 
     } else if (isComment) {
-      currentVariableContent += line + " ";
+      currentVariableContent += line + "\n";
       lineNumber++;
     }
     lineNumber++;

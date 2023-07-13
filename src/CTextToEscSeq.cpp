@@ -21,7 +21,6 @@ CTextToEscSeq::CTextToEscSeq(string name, string text, string nl,
 CTextToEscSeq::~CTextToEscSeq() {}
 
 string CTextToEscSeq::writeImplementation() {
-  LOG(DEBUG) << "Text: " << text << endl;
   std::string imp;
 
   for (char c : text) {
@@ -39,8 +38,14 @@ string CTextToEscSeq::writeImplementation() {
         imp += "\\f";
         break;  // Formfeed Page Break
       case '\n':
-        imp += "\\n";
-        break;  // Newline
+        if (nl == "DOS") {
+          imp += "\\r\\n";  // DOS (CR LF)
+        } else if (nl == "MAC") {
+          imp += "\\r";  // MAC (CR)
+        } else {
+          imp += "\\n";  // UNIX (LF)
+        }
+        break;
       case '\r':
         imp += "\\r";
         break;  // Carriage Return
@@ -75,7 +80,6 @@ string CTextToEscSeq::writeImplementation() {
         break;
     }
   }
-  cout << "Imp: " << imp << endl;
   return imp + next->writeImplementation();
 }
 

@@ -94,6 +94,7 @@ int main(int argc, char** argv) {
               << textToCPP->writeImplementation() << endl;
 
     // ----Ende:-Testausgaben---------------------------------------------------
+
     delete codegenerator;
     delete locales;
     textToCPP->clear();
