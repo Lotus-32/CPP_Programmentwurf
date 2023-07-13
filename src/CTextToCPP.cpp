@@ -122,4 +122,9 @@ void CTextToCPP::clear() {
  */
 string CTextToCPP::getName() const { return name; }
 
+string CTextToCPP::getOriginalTextComment() {
+  return "\n/*\nOriginaltext aus der Variablensektion '" + name + "'\n\n" +
+         text + "\n*/\n";
+}
+
 }  // namespace Codegenerator

@@ -25,6 +25,7 @@ class CTextToCPP {
   bool addtextsegment;
   string doxygen;
   string text;
+  string getOriginalTextComment();
 
  public:
   CTextToCPP();

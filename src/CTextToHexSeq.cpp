@@ -43,6 +43,10 @@ string CTextToHexSeq::writeImplementation() {
 
   imp = VAR_IMPLEMENTATION + name + " = {\n\"" + imp + "\"\n};\n";
 
+  if (addtextsegment) {
+    imp += getOriginalTextComment();
+  }
+
   if (next != nullptr) {
     return imp + "\n" + next->writeImplementation();
   }
