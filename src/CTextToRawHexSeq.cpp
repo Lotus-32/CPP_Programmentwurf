@@ -19,11 +19,40 @@ CTextToRawHexSeq::CTextToRawHexSeq(string name, string text, string nl,
 
 CTextToRawHexSeq::~CTextToRawHexSeq() {}
 
+string CTextToRawHexSeq::writeDeclaration() {
+  string declaration;
+
+  if (doxygen != "") {
+    declaration += "/** " + doxygen;
+    if (addtextpos) {
+      declaration += " (aus Zeile " + to_string(addtextpos) + ")";
+    }
+    declaration += " */\n";
+  }
+
+  declaration += "extern const char " + name + "[];\n";
+
+  if (next != nullptr) {
+    declaration += next->writeDeclaration();
+  }
+  return declaration;
+}
+
 string CTextToRawHexSeq::writeImplementation() {
   string imp;
   stringstream ss;
 
   for (char c : text) {
+    if (c == '\n') {
+      if (nl == "DOS" || nl == "MAC") {
+        ss << "0x" << hex << (int)'\r' << ", ";
+        imp += ss.str();
+        ss.str("");
+        if (nl == "MAC") {
+          continue;
+        }
+      }
+    }
     ss << "0x" << hex << (int)c << ", ";
     imp += ss.str();
     ss.str("");
@@ -33,6 +62,8 @@ string CTextToRawHexSeq::writeImplementation() {
     imp.pop_back();
     imp.pop_back();
   }
+
+  imp = "const char " + name + "[] = {\n" + imp + "\n};\n";
 
   if (next != nullptr) {
     return imp + "\n" + next->writeImplementation();

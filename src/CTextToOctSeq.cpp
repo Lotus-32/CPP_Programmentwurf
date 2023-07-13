@@ -24,11 +24,25 @@ string CTextToOctSeq::writeImplementation() {
   stringstream ss;
 
   for (char c : text) {
+    if (c == '\n') {
+      if (nl == "DOS" || nl == "MAC") {
+        ss << oct << (int)'\r';
+        imp += "\\";
+        imp += ss.str();
+        ss.str("");
+        if (nl == "MAC") {
+          continue;
+        }
+      }
+    }
     ss << oct << (int)c;
     imp += "\\";
     imp += ss.str();
     ss.str("");
   }
+
+  imp = VAR_IMPLEMENTATION + name + " = {\n\"" + imp + "\"\n};\n";
+
   if (next != nullptr) {
     return imp + "\n" + next->writeImplementation();
   }

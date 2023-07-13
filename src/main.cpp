@@ -87,8 +87,8 @@ int main(int argc, char** argv) {
     // textToCPP->addElement(new CTextToEscSeq("Test", "Hallo Welt"));
     // textToCPP->addElement(new CTextToHexSeq("Ann_den_Anfang", "Hallo Welt"));
     // textToCPP->sort();
-    // LOG(INFO) << "Inhalt nach sort: \n"
-    //           << textToCPP->writeDeclaration() << endl;
+    LOG(INFO) << "Inhalt nach sort: \n"
+              << textToCPP->writeDeclaration() << endl;
 
     LOG(INFO) << "Implementierung: \n"
               << textToCPP->writeImplementation() << endl;

@@ -15,6 +15,9 @@ namespace Codegenerator {
  */
 class CTextToCPP {
  protected:
+  const string VAR_DECLARATION = "extern const char * const ";
+  const string VAR_IMPLEMENTATION = "const char * const ";
+
   CTextToCPP* next;
   string name;
   string nl;
@@ -27,7 +30,7 @@ class CTextToCPP {
   CTextToCPP();
   virtual ~CTextToCPP();
 
-  string writeDeclaration();
+  virtual string writeDeclaration();
   virtual string writeImplementation();
   void addElement(CTextToCPP* element);
   void sort();
@@ -36,7 +39,6 @@ class CTextToCPP {
   string getName() const;
 
  private:
-  const string VAR_DECLARATION = "extern const char * const ";
   void insert(CTextToCPP*& sortedList, CTextToCPP* newElement);
 };
 

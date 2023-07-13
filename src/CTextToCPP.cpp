@@ -32,7 +32,6 @@ string CTextToCPP::writeDeclaration() {
   if (next != nullptr) {
     declaration += next->writeDeclaration();
   }
-
   return declaration;
 }
 

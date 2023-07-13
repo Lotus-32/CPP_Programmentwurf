@@ -80,6 +80,9 @@ string CTextToEscSeq::writeImplementation() {
         break;
     }
   }
+
+  imp = VAR_IMPLEMENTATION + name + " = {\n\"" + imp + "\"\n};\n";
+
   if (next != nullptr) {
     return imp + "\n" + next->writeImplementation();
   }

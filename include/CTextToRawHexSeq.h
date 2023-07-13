@@ -12,6 +12,7 @@ class CTextToRawHexSeq : public CTextToCPP {
                    string doxygen = "");
   ~CTextToRawHexSeq();
 
+  string writeDeclaration() override;
   string writeImplementation() override;
 };
 
