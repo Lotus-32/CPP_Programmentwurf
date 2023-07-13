@@ -9,7 +9,9 @@ CCodegenerator::~CCodegenerator() {}
 CTextToCPP *CCodegenerator::processVariableParams(const string &parameters,
                                                   const string &text,
                                                   const string &inputFileName,
-                                                  int *unnamedVarCount) {
+                                                  int *unnamedVarCount,
+                                                  int lineNumber) {
+  LOG(DEBUG) << "Linenumber: " << lineNumber << "\n";
   Json::Value json;
   Json::CharReaderBuilder readerBuilder;
   unique_ptr<Json::CharReader> reader(readerBuilder.newCharReader());
@@ -22,34 +24,35 @@ CTextToCPP *CCodegenerator::processVariableParams(const string &parameters,
       transform(varname.begin(), varname.end(), varname.begin(), ::toupper);
       varname += to_string((*unnamedVarCount)++);
     }
+    bool addtextpos = json.get(VAR_TEXTPOS, false).asBool();
+    if (!addtextpos) {
+      lineNumber = 0;
+    }
+
     string sequenz = json.get(VAR_SEQENZ, "").asString();
     if (sequenz == SEQENZ_ESC) {
-      return new CTextToEscSeq(varname, text,
-                               json.get(VAR_NEWLINE, NL_UNIX).asString(),
-                               json.get(VAR_TEXTPOS, false).asBool(),
-                               json.get(VAR_TEXTSEGMENT, false).asBool(),
-                               json.get(VAR_DOXYGEN, "").asString());
+      return new CTextToEscSeq(
+          varname, text, json.get(VAR_NEWLINE, NL_UNIX).asString(), lineNumber,
+          json.get(VAR_TEXTSEGMENT, false).asBool(),
+          json.get(VAR_DOXYGEN, "").asString());
     }
     if (sequenz == SEQENZ_HEX) {
-      return new CTextToHexSeq(varname, text,
-                               json.get(VAR_NEWLINE, NL_UNIX).asString(),
-                               json.get(VAR_TEXTPOS, false).asBool(),
-                               json.get(VAR_TEXTSEGMENT, false).asBool(),
-                               json.get(VAR_DOXYGEN, "").asString());
+      return new CTextToHexSeq(
+          varname, text, json.get(VAR_NEWLINE, NL_UNIX).asString(), lineNumber,
+          json.get(VAR_TEXTSEGMENT, false).asBool(),
+          json.get(VAR_DOXYGEN, "").asString());
     }
     if (sequenz == SEQENZ_OCT) {
-      return new CTextToOctSeq(varname, text,
-                               json.get(VAR_NEWLINE, NL_UNIX).asString(),
-                               json.get(VAR_TEXTPOS, false).asBool(),
-                               json.get(VAR_TEXTSEGMENT, false).asBool(),
-                               json.get(VAR_DOXYGEN, "").asString());
+      return new CTextToOctSeq(
+          varname, text, json.get(VAR_NEWLINE, NL_UNIX).asString(), lineNumber,
+          json.get(VAR_TEXTSEGMENT, false).asBool(),
+          json.get(VAR_DOXYGEN, "").asString());
     }
     if (sequenz == SEQENZ_RAWHEX) {
-      return new CTextToRawHexSeq(varname, text,
-                                  json.get(VAR_NEWLINE, NL_UNIX).asString(),
-                                  json.get(VAR_TEXTPOS, false).asBool(),
-                                  json.get(VAR_TEXTSEGMENT, false).asBool(),
-                                  json.get(VAR_DOXYGEN, "").asString());
+      return new CTextToRawHexSeq(
+          varname, text, json.get(VAR_NEWLINE, NL_UNIX).asString(), lineNumber,
+          json.get(VAR_TEXTSEGMENT, false).asBool(),
+          json.get(VAR_DOXYGEN, "").asString());
     }
     LOG(ERROR) << "Keine implementierte Sequenz" << errors << endl;
     return nullptr;
@@ -71,6 +74,15 @@ string CCodegenerator::extractContentBetweenTags(const string &content,
   return "";
 }
 
+/**
+ * The function "getFileNameWithoutExtension" takes a filename as input and
+ * returns the filename without the file extension.
+ *
+ * @param filename The "filename" parameter is a string that represents the name
+ * of a file, including its extension.
+ *
+ * @return The filename without the file extension.
+ */
 string CCodegenerator::getFileNameWithoutExtension(const string &filename) {
   char dot = filename.find_last_of(".");
   char slash = filename.find_last_of("/");
@@ -110,6 +122,7 @@ void CCodegenerator::processString(const string &fileContent,
   string line;
   bool isComment = false;
   string currentVariableContent = "";
+  int lineNumber = 1;
   while (getline(iss, line)) {
     if (line.find(TAG_GLOBAL) != string::npos) {
       size_t start = line.find('{');
@@ -137,13 +150,15 @@ void CCodegenerator::processString(const string &fileContent,
       isComment = false;
       variable_text = currentVariableContent;
       currentVariableContent.clear();
-      extractedTextToCPP->addElement(
-          processVariableParams(variable_options, variable_text,
-                                fileNameWithoutExt, &unnamedVariableCounter));
+      extractedTextToCPP->addElement(processVariableParams(
+          variable_options, variable_text, fileNameWithoutExt,
+          &unnamedVariableCounter, lineNumber));
 
     } else if (isComment) {
       currentVariableContent += line + " ";
+      lineNumber++;
     }
+    lineNumber++;
   }
 }
 

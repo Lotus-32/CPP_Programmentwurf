@@ -3,7 +3,7 @@
 namespace Codegenerator {
 
 CTextToHexSeq::CTextToHexSeq(string name, string text, string nl,
-                             bool addtextpos, bool addtextsegment,
+                             int addtextpos, bool addtextsegment,
                              string doxygen) {
   this->name = name;
   this->text = text;
@@ -18,13 +18,6 @@ CTextToHexSeq::CTextToHexSeq(string name, string text, string nl,
 }
 
 CTextToHexSeq::~CTextToHexSeq() {}
-
-string CTextToHexSeq::writeDeclaration() {
-  if (next != nullptr) {
-    return name + "\n" + next->writeDeclaration();
-  }
-  return name;
-}
 
 string CTextToHexSeq::writeImplementation() { return ""; }
 

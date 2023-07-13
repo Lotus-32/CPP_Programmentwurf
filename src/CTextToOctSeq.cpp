@@ -3,7 +3,7 @@
 namespace Codegenerator {
 
 CTextToOctSeq::CTextToOctSeq(string name, string text, string nl,
-                             bool addtextpos, bool addtextsegment,
+                             int addtextpos, bool addtextsegment,
                              string doxygen) {
   this->name = name;
   this->text = text;
@@ -18,13 +18,6 @@ CTextToOctSeq::CTextToOctSeq(string name, string text, string nl,
 }
 
 CTextToOctSeq::~CTextToOctSeq() {}
-
-string CTextToOctSeq::writeDeclaration() {
-  if (next != nullptr) {
-    return name + "\n" + next->writeDeclaration();
-  }
-  return name;
-}
 
 string CTextToOctSeq::writeImplementation() { return ""; }
 

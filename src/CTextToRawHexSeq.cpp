@@ -3,7 +3,7 @@
 namespace Codegenerator {
 
 CTextToRawHexSeq::CTextToRawHexSeq(string name, string text, string nl,
-                                   bool addtextpos, bool addtextsegment,
+                                   int addtextpos, bool addtextsegment,
                                    string doxygen) {
   this->name = name;
   this->text = text;
@@ -18,13 +18,6 @@ CTextToRawHexSeq::CTextToRawHexSeq(string name, string text, string nl,
 }
 
 CTextToRawHexSeq::~CTextToRawHexSeq() {}
-
-string CTextToRawHexSeq::writeDeclaration() {
-  if (next != nullptr) {
-    return name + "\n" + next->writeDeclaration();
-  }
-  return name;
-}
 
 string CTextToRawHexSeq::writeImplementation() { return ""; }
 

@@ -3,7 +3,7 @@
 namespace Codegenerator {
 
 CTextToEscSeq::CTextToEscSeq(string name, string text, string nl,
-                             bool addtextpos, bool addtextsegment,
+                             int addtextpos, bool addtextsegment,
                              string doxygen) {
   this->name = name;
   this->text = text;
@@ -19,13 +19,6 @@ CTextToEscSeq::CTextToEscSeq(string name, string text, string nl,
 }
 
 CTextToEscSeq::~CTextToEscSeq() {}
-
-string CTextToEscSeq::writeDeclaration() {
-  if (next != nullptr) {
-    return name + "\n" + next->writeDeclaration();
-  }
-  return name;
-}
 
 string CTextToEscSeq::writeImplementation() { return ""; }
 

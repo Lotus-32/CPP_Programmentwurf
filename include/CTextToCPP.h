@@ -18,7 +18,7 @@ class CTextToCPP {
   CTextToCPP* next;
   string name;
   string nl;
-  bool addtextpos;
+  int addtextpos;
   bool addtextsegment;
   string doxygen;
   string text;
@@ -27,7 +27,7 @@ class CTextToCPP {
   CTextToCPP();
   virtual ~CTextToCPP();
 
-  virtual string writeDeclaration();
+  string writeDeclaration();
   virtual string writeImplementation();
   void addElement(CTextToCPP* element);
   void sort();
@@ -36,6 +36,7 @@ class CTextToCPP {
   string getName() const;
 
  private:
+  const string VAR_DECLARATION = "extern const char * const ";
   void insert(CTextToCPP*& sortedList, CTextToCPP* newElement);
 };
 

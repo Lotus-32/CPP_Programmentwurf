@@ -16,7 +16,28 @@ CTextToCPP::~CTextToCPP() {
  *
  * @return string Content of the header file
  */
-string CTextToCPP::writeDeclaration() { return next->writeDeclaration(); }
+string CTextToCPP::writeDeclaration() {
+  if (name == "") {
+    return next->writeDeclaration();
+  }
+  string declaration;
+
+  if (doxygen != "") {
+    declaration += "/** " + doxygen;
+    if (addtextpos) {
+      declaration += " (aus Zeile " + to_string(addtextpos) + ")";
+    }
+    declaration += " */\n";
+  }
+
+  declaration += VAR_DECLARATION + name + ";\n";
+
+  if (next != nullptr) {
+    declaration += next->writeDeclaration();
+  }
+
+  return declaration;
+}
 
 /**
  * @brief Generates the content of a source file
