@@ -44,11 +44,7 @@ string CTextToCPP::writeDeclaration() {
  *
  * @return string Content of the source file
  */
-string CTextToCPP::writeImplementation() {
-  // TODO: implement
-
-  return "Implementation";
-}
+string CTextToCPP::writeImplementation() { return next->writeImplementation(); }
 
 /**
  * @brief Adds an element to the concatenation

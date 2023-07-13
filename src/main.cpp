@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
   initLogging();
 
   Options options;
-  options.parseOptions(argc, argv);
+  options.parseGlobaleOptions(argc, argv);
 
   vector<string> files = options.getFileNames();
 
@@ -67,27 +67,33 @@ int main(int argc, char** argv) {
                        istreambuf_iterator<char>());
     inputFile.close();
 
-    string* globales = new string();
+    string* locales = new string();
     CCodegenerator* codegenerator = new CCodegenerator();
-    codegenerator->processString(fileContent, file, textToCPP, globales);
+    codegenerator->processString(fileContent, file, textToCPP, locales);
+
+    if (!locales->empty()) {
+      LOG(INFO) << "Globale Variablen: \n" << *locales << endl;
+
+      options.parseLocalOptions(*locales, file);
+    }
 
     // ----Testausgaben---------------------------------------------------
 
-    LOG(INFO) << "Globale Variablen: \n" << *globales << endl;
+    LOG(INFO) << "Globale Variablen: \n" << *locales << endl;
 
     LOG(INFO) << "Inhalt: \n" << textToCPP->writeDeclaration() << endl;
     textToCPP->sort();
     LOG(INFO) << "Inhalt nach sort: \n"
               << textToCPP->writeDeclaration() << endl;
     textToCPP->addElement(new CTextToEscSeq("Test", "Hallo Welt"));
-    textToCPP->addElement(new CTextToHexSeq("Ann den Anfang", "Hallo Welt"));
+    textToCPP->addElement(new CTextToHexSeq("Ann_den_Anfang", "Hallo Welt"));
     textToCPP->sort();
     LOG(INFO) << "Inhalt nach sort: \n"
               << textToCPP->writeDeclaration() << endl;
 
     // ----Ende:-Testausgaben---------------------------------------------------
     delete codegenerator;
-    delete globales;
+    delete locales;
     textToCPP->clear();
   }
   delete textToCPP;

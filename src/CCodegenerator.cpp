@@ -57,7 +57,8 @@ CTextToCPP *CCodegenerator::processVariableParams(const string &parameters,
     LOG(ERROR) << "Keine implementierte Sequenz" << errors << endl;
     return nullptr;
   } else {
-    LOG(ERROR) << "Fehler beim Parsen der Parameter: " << errors << endl;
+    LOG(ERROR) << "Fehler beim Parsen der Attribut-Parameter: " << errors
+               << endl;
     return nullptr;
   }
 }

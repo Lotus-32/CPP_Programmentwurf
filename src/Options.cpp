@@ -1,13 +1,21 @@
 #include <Options.h>
 #include <easylogging++.h>
+#include <jsoncpp/json/json.h>
 
 namespace Codegenerator {
 
-Options::Options() {}
+Options::Options()
+    : outputFilename(""),
+      outputType("CPP"),
+      headerDir("./"),
+      sourceDir("./"),
+      namespaceStr(""),
+      signPerLine(60),
+      sortByVarName(false) {}
 
 Options::~Options() {}
 
-void Options::parseOptions(int argc, char** argv) {
+void Options::parseGlobaleOptions(int argc, char** argv) {
   const struct option long_options[] = {
       {"outputfilename", required_argument, 0, 'o'},
       {"outputtype", required_argument, 0, 't'},
@@ -78,6 +86,57 @@ void Options::parseOptions(int argc, char** argv) {
   // Get the fileNames
   for (int i = optind; i < argc; i++) {
     fileNames.push_back(argv[i]);
+  }
+}
+
+void Options::parseLocalOptions(string& locales, string& inputFileName) {
+  Json::Value json;
+  Json::CharReaderBuilder readerBuilder;
+  unique_ptr<Json::CharReader> reader(readerBuilder.newCharReader());
+  string errors;
+
+  LOG(DEBUG) << "Parse: " << locales;
+
+  if (reader->parse(locales.c_str(), locales.c_str() + locales.length(), &json,
+                    &errors)) {
+    if (!isSetOutputFilename) {
+      json.get("outputfilename", inputFileName);
+      isSetOutputFilename = true;
+      LOG(INFO) << "Outputfilename: " << inputFileName;
+    }
+    if (!isSetOutputType) {
+      json.get("outputtype", outputType);
+      isSetOutputType = true;
+      LOG(INFO) << "Outputtype: " << outputType;
+    }
+    if (!isSetHeaderDir) {
+      json.get("headerdir", headerDir);
+      isSetHeaderDir = true;
+      LOG(INFO) << "Headerdir: " << headerDir;
+    }
+    if (!isSetSourceDir) {
+      json.get("sourcedir", sourceDir);
+      isSetSourceDir = true;
+      LOG(INFO) << "Sourcedir: " << sourceDir;
+    }
+    if (!isSetNamespace) {
+      json.get("namespace", namespaceStr);
+      isSetNamespace = true;
+      LOG(INFO) << "Namespace: " << namespaceStr;
+    }
+    if (!isSetSignPerLine) {
+      json.get("signperline", signPerLine);
+      isSetSignPerLine = true;
+      LOG(INFO) << "Signperline: " << signPerLine;
+    }
+    if (!isSetSortByVarName) {
+      json.get("sortbyvarname", sortByVarName);
+      isSetSortByVarName = true;
+      LOG(INFO) << "Sortbyvarname: " << sortByVarName;
+    }
+  } else {
+    LOG(ERROR) << "Fehler beim Parsen der lokalen Parameter: " << errors
+               << endl;
   }
 }
 

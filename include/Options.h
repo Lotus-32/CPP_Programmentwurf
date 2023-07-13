@@ -14,7 +14,8 @@ class Options {
   Options();
   ~Options();
 
-  void parseOptions(int argc, char** argv);
+  void parseGlobaleOptions(int argc, char** argv);
+  void parseLocalOptions(string& locales, string& inputFileName);
 
   string getOutputFilename() const;
   string getOutputType() const;
