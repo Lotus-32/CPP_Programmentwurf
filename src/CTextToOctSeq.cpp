@@ -20,7 +20,19 @@ CTextToOctSeq::CTextToOctSeq(string name, string text, string nl,
 CTextToOctSeq::~CTextToOctSeq() {}
 
 string CTextToOctSeq::writeImplementation() {
-  return next->writeImplementation();
+  string imp;
+  stringstream ss;
+
+  for (char c : text) {
+    ss << oct << (int)c;
+    imp += "\\";
+    imp += ss.str();
+    ss.str("");
+  }
+  if (next != nullptr) {
+    return imp + next->writeImplementation();
+  }
+  return imp;
 }
 
 }  // namespace Codegenerator

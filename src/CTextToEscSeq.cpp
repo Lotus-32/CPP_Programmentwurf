@@ -80,7 +80,10 @@ string CTextToEscSeq::writeImplementation() {
         break;
     }
   }
-  return imp + next->writeImplementation();
+  if (next != nullptr) {
+    return imp + next->writeImplementation();
+  }
+  return imp;
 }
 
 }  // namespace Codegenerator
