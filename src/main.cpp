@@ -73,23 +73,25 @@ int main(int argc, char** argv) {
 
     if (!locales->empty()) {
       LOG(INFO) << "Globale Variablen: \n" << *locales << endl;
-
       options.parseLocalOptions(*locales, file);
     }
 
     // ----Testausgaben---------------------------------------------------
 
-    LOG(INFO) << "Globale Variablen: \n" << *locales << endl;
+    // LOG(INFO) << "Globale Variablen: \n" << *locales << endl;
 
-    LOG(INFO) << "Inhalt: \n" << textToCPP->writeDeclaration() << endl;
-    textToCPP->sort();
-    LOG(INFO) << "Inhalt nach sort: \n"
-              << textToCPP->writeDeclaration() << endl;
-    textToCPP->addElement(new CTextToEscSeq("Test", "Hallo Welt"));
-    textToCPP->addElement(new CTextToHexSeq("Ann_den_Anfang", "Hallo Welt"));
-    textToCPP->sort();
-    LOG(INFO) << "Inhalt nach sort: \n"
-              << textToCPP->writeDeclaration() << endl;
+    // LOG(INFO) << "Inhalt: \n" << textToCPP->writeDeclaration() << endl;
+    // textToCPP->sort();
+    // LOG(INFO) << "Inhalt nach sort: \n"
+    //           << textToCPP->writeDeclaration() << endl;
+    // textToCPP->addElement(new CTextToEscSeq("Test", "Hallo Welt"));
+    // textToCPP->addElement(new CTextToHexSeq("Ann_den_Anfang", "Hallo Welt"));
+    // textToCPP->sort();
+    // LOG(INFO) << "Inhalt nach sort: \n"
+    //           << textToCPP->writeDeclaration() << endl;
+
+    LOG(INFO) << "Implementierung: \n"
+              << textToCPP->writeImplementation() << endl;
 
     // ----Ende:-Testausgaben---------------------------------------------------
     delete codegenerator;

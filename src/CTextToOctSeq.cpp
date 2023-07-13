@@ -19,6 +19,8 @@ CTextToOctSeq::CTextToOctSeq(string name, string text, string nl,
 
 CTextToOctSeq::~CTextToOctSeq() {}
 
-string CTextToOctSeq::writeImplementation() { return ""; }
+string CTextToOctSeq::writeImplementation() {
+  return next->writeImplementation();
+}
 
 }  // namespace Codegenerator
