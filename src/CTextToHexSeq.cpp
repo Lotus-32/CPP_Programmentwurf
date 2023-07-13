@@ -19,6 +19,20 @@ CTextToHexSeq::CTextToHexSeq(string name, string text, string nl,
 
 CTextToHexSeq::~CTextToHexSeq() {}
 
-string CTextToHexSeq::writeImplementation() { return ""; }
+string CTextToHexSeq::writeImplementation() {
+  string imp;
+  stringstream ss;
+
+  for (char c : text) {
+    ss << hex << (int)c;
+    imp += "\\x";
+    imp += ss.str();
+    ss.str("");
+  }
+  if (next != nullptr) {
+    return imp + "\n" + next->writeImplementation();
+  }
+  return imp;
+}
 
 }  // namespace Codegenerator

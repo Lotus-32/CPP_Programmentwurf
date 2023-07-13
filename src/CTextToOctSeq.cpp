@@ -30,7 +30,7 @@ string CTextToOctSeq::writeImplementation() {
     ss.str("");
   }
   if (next != nullptr) {
-    return imp + next->writeImplementation();
+    return imp + "\n" + next->writeImplementation();
   }
   return imp;
 }

@@ -81,7 +81,7 @@ string CTextToEscSeq::writeImplementation() {
     }
   }
   if (next != nullptr) {
-    return imp + next->writeImplementation();
+    return imp + "\n" + next->writeImplementation();
   }
   return imp;
 }
