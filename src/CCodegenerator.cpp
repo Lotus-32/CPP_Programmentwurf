@@ -19,7 +19,7 @@ CTextToCPP *CCodegenerator::processVariableParams(
                     parameters.c_str() + parameters.length(), &json, &errors)) {
     string varname = json.get(VAR_NAME, inputFileName).asString();
     if (!json.isMember(VAR_NAME)) {
-      transform(varname.begin(), varname.end(), varname.begin(), ::toupper);
+      varname = toUpperCase(varname);
       varname += to_string((*unnamedVarCount)++);
     }
     bool addtextpos = json.get(VAR_TEXTPOS, false).asBool();
@@ -91,6 +91,12 @@ string CCodegenerator::getFileNameWithoutExtension(const string &filename) {
   return filename;
 }
 
+string CCodegenerator::toUpperCase(const string &input) {
+  string output = input;
+  transform(output.begin(), output.end(), output.begin(), ::toupper);
+  return output;
+}
+
 void CCodegenerator::processString(const string &fileContent,
                                    const string &filename,
                                    CTextToCPP *extractedTextToCPP,
@@ -102,6 +108,7 @@ void CCodegenerator::processString(const string &fileContent,
         fileContent.find("@end") != string::npos)) {
     extractedTextToCPP->addElement(new CTextToEscSeq(
         fileNameWithoutExt, fileContent, localeOptions->getSignPerLine()));
+    localeOptions->setOutputFilename(fileNameWithoutExt);
     return;
   }
 
@@ -172,6 +179,18 @@ void CCodegenerator::processString(const string &fileContent,
 string CCodegenerator::generateNamespace(const string &namespaceName,
                                          const string &namespaceContent) {
   return "namespace " + namespaceName + " {\n" + namespaceContent + "}";
+}
+
+string CCodegenerator::generateSourceHead(const string &filename,
+                                          const string &fileContent) {
+  return "#include <" + filename + ".h>\n\n" + fileContent;
+}
+
+string CCodegenerator::generateHeaderSurroundings(const string &filename,
+                                                  const string &fileContent) {
+  string nameCaps = toUpperCase(filename);
+  return "#ifndef _" + nameCaps + "_\n#define _" + nameCaps + "_\n\n" +
+         fileContent + "\n#endif";
 }
 
 }  // namespace Codegenerator

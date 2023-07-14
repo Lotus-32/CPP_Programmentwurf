@@ -81,6 +81,10 @@ int main(int argc, char** argv) {
       implementation = codegenerator->generateNamespace(
           localeOptions->getNamespace(), implementation);
     }
+    declaration = codegenerator->generateHeaderSurroundings(
+        localeOptions->getOutputFilename(), declaration);
+    implementation = codegenerator->generateSourceHead(
+        localeOptions->getOutputFilename(), implementation);
 
     // ----Testausgaben---------------------------------------------------
 

@@ -47,6 +47,8 @@ class CCodegenerator {
 
   string getFileNameWithoutExtension(const string& filename);
 
+  string toUpperCase(const string& input);
+
  public:
   CCodegenerator();
   ~CCodegenerator();
@@ -56,6 +58,10 @@ class CCodegenerator {
 
   string generateNamespace(const string& namespaceName,
                            const string& namespaceContent);
+
+  string generateSourceHead(const string& filename, const string& fileContent);
+  string generateHeaderSurroundings(const string& filename,
+                                    const string& fileContent);
 };
 
 }  // namespace Codegenerator
