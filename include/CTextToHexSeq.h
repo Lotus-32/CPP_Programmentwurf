@@ -7,12 +7,12 @@ namespace Codegenerator {
 
 class CTextToHexSeq : public CTextToCPP {
  public:
-  CTextToHexSeq(string name, string text, string nl = "UNIX",
+  CTextToHexSeq(string name, string text, int signperline, string nl = "UNIX",
                 int addtextpos = 0, bool addtextsegment = false,
                 string doxygen = "");
   ~CTextToHexSeq();
 
-  string writeImplementation(int signperline) override;
+  string writeImplementation() override;
 };
 
 }  // namespace Codegenerator

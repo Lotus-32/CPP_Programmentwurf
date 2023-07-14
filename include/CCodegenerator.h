@@ -38,7 +38,8 @@ class CCodegenerator {
   CTextToCPP* processVariableParams(const string& parameters,
                                     const string& text,
                                     const string& inputFileName,
-                                    int* unnamedVarCount, int lineNumber);
+                                    int* unnamedVarCount, int lineNumber,
+                                    int signPerLine);
 
   string extractContentBetweenTags(const string& content,
                                    const string& startTag,

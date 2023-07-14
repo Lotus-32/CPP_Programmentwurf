@@ -2,15 +2,16 @@
 
 namespace Codegenerator {
 
-CTextToRawHexSeq::CTextToRawHexSeq(string name, string text, string nl,
-                                   int addtextpos, bool addtextsegment,
-                                   string doxygen) {
+CTextToRawHexSeq::CTextToRawHexSeq(string name, string text, int signperline,
+                                   string nl, int addtextpos,
+                                   bool addtextsegment, string doxygen) {
   this->name = name;
   this->text = text;
   this->nl = nl;
   this->addtextpos = addtextpos;
   this->addtextsegment = addtextsegment;
   this->doxygen = doxygen;
+  this->signperline = signperline;
   next = nullptr;
   LOG(DEBUG) << "CTextToRawHexSeq: " << name << " " << nl << " " << addtextpos
              << " " << addtextsegment << " " << doxygen << "\n"
@@ -38,7 +39,7 @@ string CTextToRawHexSeq::writeDeclaration() {
   return declaration;
 }
 
-string CTextToRawHexSeq::writeImplementation(int signperline) {
+string CTextToRawHexSeq::writeImplementation() {
   string imp;
   stringstream ss;
 
@@ -71,7 +72,7 @@ string CTextToRawHexSeq::writeImplementation(int signperline) {
   }
 
   if (next != nullptr) {
-    return imp + "\n" + next->writeImplementation(signperline);
+    return imp + "\n" + next->writeImplementation();
   }
   return imp;
 }

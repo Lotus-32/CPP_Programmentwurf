@@ -71,20 +71,19 @@ int main(int argc, char** argv) {
 
     // ----Testausgaben---------------------------------------------------
 
-    // LOG(INFO) << "Globale Variablen: \n" << *locales << endl;
-
-    // LOG(INFO) << "Inhalt: \n" << textToCPP->writeDeclaration() << endl;
-    // textToCPP->sort();
-    // LOG(INFO) << "Inhalt nach sort: \n"
-    //           << textToCPP->writeDeclaration() << endl;
-    // textToCPP->addElement(new CTextToEscSeq("Test", "Hallo Welt"));
-    // textToCPP->addElement(new CTextToHexSeq("Ann_den_Anfang", "Hallo Welt"));
-    // textToCPP->sort();
+    LOG(INFO) << "Inhalt: \n" << textToCPP->writeDeclaration() << endl;
+    textToCPP->sort();
+    LOG(INFO) << "Inhalt nach sort: \n"
+              << textToCPP->writeDeclaration() << endl;
+    textToCPP->addElement(new CTextToEscSeq("Test", "Hallo Welt",
+                                            localeOptions->getSignPerLine()));
+    textToCPP->addElement(new CTextToHexSeq("Ann_den_Anfang", "Hallo Welt",
+                                            localeOptions->getSignPerLine()));
+    textToCPP->sort();
     LOG(INFO) << "Inhalt nach sort: \n"
               << textToCPP->writeDeclaration() << endl;
     LOG(INFO) << "Implementierung: \n"
-              << textToCPP->writeImplementation(localeOptions->getSignPerLine())
-              << endl;
+              << textToCPP->writeImplementation() << endl;
 
     // ----Ende:-Testausgaben---------------------------------------------------
 

@@ -7,12 +7,12 @@ namespace Codegenerator {
 
 class CTextToOctSeq : public CTextToCPP {
  public:
-  CTextToOctSeq(string name, string text, string nl = "UNIX",
+  CTextToOctSeq(string name, string text, int signperline, string nl = "UNIX",
                 int addtextpos = 0, bool addtextsegment = false,
                 string doxygen = "");
   ~CTextToOctSeq();
 
-  string writeImplementation(int signperline) override;
+  string writeImplementation() override;
 };
 
 }  // namespace Codegenerator

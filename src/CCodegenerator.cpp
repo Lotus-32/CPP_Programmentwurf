@@ -6,11 +6,9 @@ CCodegenerator::CCodegenerator() {}
 
 CCodegenerator::~CCodegenerator() {}
 
-CTextToCPP *CCodegenerator::processVariableParams(const string &parameters,
-                                                  const string &text,
-                                                  const string &inputFileName,
-                                                  int *unnamedVarCount,
-                                                  int lineNumber) {
+CTextToCPP *CCodegenerator::processVariableParams(
+    const string &parameters, const string &text, const string &inputFileName,
+    int *unnamedVarCount, int lineNumber, int signPerLine) {
   LOG(DEBUG) << "Linenumber: " << lineNumber << "\n";
   Json::Value json;
   Json::CharReaderBuilder readerBuilder;
@@ -32,25 +30,25 @@ CTextToCPP *CCodegenerator::processVariableParams(const string &parameters,
     string sequenz = json.get(VAR_SEQENZ, "").asString();
     if (sequenz == SEQENZ_ESC) {
       return new CTextToEscSeq(
-          varname, text, json.get(VAR_NEWLINE, NL_UNIX).asString(), lineNumber,
+          varname, text, signPerLine, json.get(VAR_NEWLINE, NL_UNIX).asString(), lineNumber,
           json.get(VAR_TEXTSEGMENT, false).asBool(),
           json.get(VAR_DOXYGEN, "").asString());
     }
     if (sequenz == SEQENZ_HEX) {
       return new CTextToHexSeq(
-          varname, text, json.get(VAR_NEWLINE, NL_UNIX).asString(), lineNumber,
+          varname, text, signPerLine, json.get(VAR_NEWLINE, NL_UNIX).asString(), lineNumber,
           json.get(VAR_TEXTSEGMENT, false).asBool(),
           json.get(VAR_DOXYGEN, "").asString());
     }
     if (sequenz == SEQENZ_OCT) {
       return new CTextToOctSeq(
-          varname, text, json.get(VAR_NEWLINE, NL_UNIX).asString(), lineNumber,
+          varname, text, signPerLine, json.get(VAR_NEWLINE, NL_UNIX).asString(), lineNumber,
           json.get(VAR_TEXTSEGMENT, false).asBool(),
           json.get(VAR_DOXYGEN, "").asString());
     }
     if (sequenz == SEQENZ_RAWHEX) {
       return new CTextToRawHexSeq(
-          varname, text, json.get(VAR_NEWLINE, NL_UNIX).asString(), lineNumber,
+          varname, text, signPerLine, json.get(VAR_NEWLINE, NL_UNIX).asString(), lineNumber,
           json.get(VAR_TEXTSEGMENT, false).asBool(),
           json.get(VAR_DOXYGEN, "").asString());
     }
@@ -103,7 +101,7 @@ void CCodegenerator::processString(const string &fileContent,
   if (!(fileContent.find("@start") != string::npos &&
         fileContent.find("@end") != string::npos)) {
     extractedTextToCPP->addElement(
-        new CTextToEscSeq(fileNameWithoutExt, fileContent));
+        new CTextToEscSeq(fileNameWithoutExt, fileContent, localeOptions->getSignPerLine()));
     return;
   }
 
@@ -133,7 +131,6 @@ void CCodegenerator::processString(const string &fileContent,
           start < end) {
         // Extrahieren des Inhalts mit den geschweiften Klammern
         std::string content = line.substr(start, end - start + 1);
-        // *extractedGlobales += content + "\n";
         if (!content.empty()) {
           localeOptions->parseLocalOptions(content, fileNameWithoutExt);
         }
@@ -159,9 +156,10 @@ void CCodegenerator::processString(const string &fileContent,
       variable_text = currentVariableContent;
       LOG(DEBUG) << "Variablen Inhalt: " << variable_text << endl;
       currentVariableContent.clear();
-      extractedTextToCPP->addElement(processVariableParams(
-          variable_options, variable_text, fileNameWithoutExt,
-          &unnamedVariableCounter, lineNumber));
+      extractedTextToCPP->addElement(
+          processVariableParams(variable_options, variable_text,
+                                fileNameWithoutExt, &unnamedVariableCounter,
+                                lineNumber, localeOptions->getSignPerLine()));
 
     } else if (isComment) {
       currentVariableContent += line + "\n";

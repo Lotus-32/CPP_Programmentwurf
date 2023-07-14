@@ -25,6 +25,7 @@ class CTextToCPP {
   bool addtextsegment;
   string doxygen;
   string text;
+  int signperline;
   string getOriginalTextComment();
   string wordWrap(string text, char cut, bool isRaw, int maxLineLength = 60);
 
@@ -33,7 +34,7 @@ class CTextToCPP {
   virtual ~CTextToCPP();
 
   virtual string writeDeclaration();
-  virtual string writeImplementation(int signperline);
+  virtual string writeImplementation();
   void addElement(CTextToCPP* element);
   void sort();
   void clear();

@@ -2,8 +2,8 @@
 
 namespace Codegenerator {
 
-CTextToEscSeq::CTextToEscSeq(string name, string text, string nl,
-                             int addtextpos, bool addtextsegment,
+CTextToEscSeq::CTextToEscSeq(string name, string text, int signperline,
+                             string nl, int addtextpos, bool addtextsegment,
                              string doxygen) {
   this->name = name;
   this->text = text;
@@ -11,6 +11,7 @@ CTextToEscSeq::CTextToEscSeq(string name, string text, string nl,
   this->addtextpos = addtextpos;
   this->addtextsegment = addtextsegment;
   this->doxygen = doxygen;
+  this->signperline = signperline;
   next = nullptr;
   LOG(DEBUG) << "CTextToEscSeq: " << this->name << " " << this->nl << " "
              << this->addtextpos << " " << this->addtextsegment << " "
@@ -20,7 +21,7 @@ CTextToEscSeq::CTextToEscSeq(string name, string text, string nl,
 
 CTextToEscSeq::~CTextToEscSeq() {}
 
-string CTextToEscSeq::writeImplementation(int signperline) {
+string CTextToEscSeq::writeImplementation() {
   std::string imp;
 
   for (char c : text) {
@@ -89,7 +90,7 @@ string CTextToEscSeq::writeImplementation(int signperline) {
   }
 
   if (next != nullptr) {
-    return imp + "\n" + next->writeImplementation(signperline);
+    return imp + "\n" + next->writeImplementation();
   }
   return imp;
 }
