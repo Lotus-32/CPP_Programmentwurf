@@ -14,6 +14,9 @@ using namespace std;
 
 namespace Codegenerator {
 
+/**The `class CCodegenerator` is used to parse the content of the input file and
+   generates CTexToCPP objects vor the variables and completes the options.
+   It has also various functions to complete the generated source code.*/
 class CCodegenerator {
  private:
   const string VAR_NAME = "varname";

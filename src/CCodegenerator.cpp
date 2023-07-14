@@ -52,11 +52,10 @@ CTextToCPP *CCodegenerator::processVariableParams(
           lineNumber, json.get(VAR_TEXTSEGMENT, false).asBool(),
           json.get(VAR_DOXYGEN, "").asString());
     }
-    LOG(ERROR) << "Keine implementierte Sequenz" << errors << endl;
+    cerr << "Thats not an implemented sequence!" << errors << endl;
     return nullptr;
   } else {
-    LOG(ERROR) << "Fehler beim Parsen der Attribut-Parameter: " << errors
-               << endl;
+    cerr << "Error parsing attribute parameters: " << errors << endl;
     return nullptr;
   }
 }
@@ -69,8 +68,9 @@ string CCodegenerator::extractContentBetweenTags(const string &content,
   if (startPos != string::npos && endPos != string::npos && startPos < endPos) {
     startPos += startTag.length();
     return content.substr(startPos, endPos - startPos);
+  } else {
+    return "";
   }
-  return "";
 }
 
 /**
@@ -87,8 +87,9 @@ string CCodegenerator::getFileNameWithoutExtension(const string &filename) {
   char slash = filename.find_last_of("/");
   if (dot != string::npos && dot > slash) {
     return filename.substr(slash + 1, dot - slash - 1);
+  } else {
+    return filename;
   }
-  return filename;
 }
 
 string CCodegenerator::toUpperCases(const string &input) {
@@ -103,7 +104,7 @@ void CCodegenerator::processString(const string &fileContent,
                                    Options *localeOptions) {
   string fileNameWithoutExt = getFileNameWithoutExtension(filename);
 
-  // Keine Tags vorhanden
+  // No tags
   if (!(fileContent.find("@start") != string::npos &&
         fileContent.find("@end") != string::npos)) {
     extractedTextToCPP->addElement(new CTextToEscSeq(
@@ -112,11 +113,11 @@ void CCodegenerator::processString(const string &fileContent,
     return;
   }
 
-  // Tags vorhanden
+  // Has tags
   string extractedContent =
       extractContentBetweenTags(fileContent, "@start\n", "@end\n");
   if (extractedContent.empty()) {
-    LOG(ERROR) << "Keine Parameter gefunden!" << endl;
+    cerr << "Din't find any parameters!" << endl;
     return;
   }
 
@@ -136,7 +137,7 @@ void CCodegenerator::processString(const string &fileContent,
 
       if (start != std::string::npos && end != std::string::npos &&
           start < end) {
-        // Extrahieren des Inhalts mit den geschweiften Klammern
+        // Extract the content between the curly braces
         std::string content = line.substr(start, end - start + 1);
         if (!content.empty()) {
           localeOptions->parseLocalOptions(content, fileNameWithoutExt);
@@ -149,7 +150,7 @@ void CCodegenerator::processString(const string &fileContent,
 
       if (start != std::string::npos && end != std::string::npos &&
           start < end) {
-        // Extrahieren des Inhalts mit den geschweiften Klammern
+        // Extract the content with the curly braces
         std::string content = line.substr(start, end - start + 1);
         variable_options = content;
         isComment = true;
@@ -161,7 +162,7 @@ void CCodegenerator::processString(const string &fileContent,
       }
       isComment = false;
       variable_text = currentVariableContent;
-      LOG(DEBUG) << "Variablen Inhalt: " << variable_text << endl;
+      LOG(DEBUG) << "Variables Content: " << variable_text << endl;
       currentVariableContent.clear();
       extractedTextToCPP->addElement(
           processVariableParams(variable_options, variable_text,
