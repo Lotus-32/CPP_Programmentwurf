@@ -100,37 +100,37 @@ void Options::parseLocalOptions(string& locales, string& inputFileName) {
   if (reader->parse(locales.c_str(), locales.c_str() + locales.length(), &json,
                     &errors)) {
     if (!isSetOutputFilename) {
-      json.get("outputfilename", inputFileName);
+      outputFilename = json.get("outputfilename", inputFileName).asString();
       isSetOutputFilename = true;
       LOG(INFO) << "Outputfilename: " << inputFileName;
     }
     if (!isSetOutputType) {
-      json.get("outputtype", outputType);
+      outputType = json.get("outputtype", outputType).asString();
       isSetOutputType = true;
       LOG(INFO) << "Outputtype: " << outputType;
     }
     if (!isSetHeaderDir) {
-      json.get("headerdir", headerDir);
+      headerDir = json.get("headerdir", headerDir).asString();
       isSetHeaderDir = true;
       LOG(INFO) << "Headerdir: " << headerDir;
     }
     if (!isSetSourceDir) {
-      json.get("sourcedir", sourceDir);
+      sourceDir = json.get("sourcedir", sourceDir).asString();
       isSetSourceDir = true;
       LOG(INFO) << "Sourcedir: " << sourceDir;
     }
     if (!isSetNamespace) {
-      json.get("namespace", namespaceStr);
+      namespaceStr = json.get("namespace", namespaceStr).asString();
       isSetNamespace = true;
       LOG(INFO) << "Namespace: " << namespaceStr;
     }
     if (!isSetSignPerLine) {
-      json.get("signperline", signPerLine);
+      signPerLine = json.get("signperline", signPerLine).asInt();
       isSetSignPerLine = true;
       LOG(INFO) << "Signperline: " << signPerLine;
     }
     if (!isSetSortByVarName) {
-      json.get("sortbyvarname", sortByVarName);
+      sortByVarName = json.get("sortbyvarname", sortByVarName).asBool();
       isSetSortByVarName = true;
       LOG(INFO) << "Sortbyvarname: " << sortByVarName;
     }
