@@ -1,6 +1,4 @@
 #include <Options.h>
-#include <easylogging++.h>
-#include <jsoncpp/json/json.h>
 
 namespace Codegenerator {
 
@@ -15,6 +13,18 @@ Options::Options()
 
 Options::~Options() {}
 
+/**
+ * The function `parseGlobalOptions` parses command line options and arguments,
+ * storing the values in member variables.
+ *
+ * @param argc The parameter `argc` is the number of command-line arguments
+ * passed to the program. It includes the name of the program itself as the
+ * first argument.
+ * @param argv The `argv` parameter is an array of C-style strings (char**) that
+ * represents the command-line arguments passed to the program. Each element of
+ * the array is a null-terminated string, where the first element (`argv[0]`) is
+ * the name of the program itself, and the subsequent elements
+ */
 void Options::parseGlobaleOptions(int argc, char** argv) {
   const struct option long_options[] = {
       {"outputfilename", required_argument, 0, 'o'},
@@ -42,7 +52,7 @@ void Options::parseGlobaleOptions(int argc, char** argv) {
       case 't':
         outputType = optarg;
         if (outputType != "C" && outputType != "CPP") {
-          LOG(ERROR) << "Ungültiger Outputtype: " << outputType;
+          cerr << "Invalid output type: " << outputType << endl;
           break;
         }
         isSetOutputType = true;
@@ -74,7 +84,7 @@ void Options::parseGlobaleOptions(int argc, char** argv) {
         LOG(INFO) << "Sortbyvarname: true";
         break;
       case '?':
-        LOG(ERROR) << "Unbekannte Option: " << optopt;
+        cerr << "Unknown option: " << optopt << endl;
     }
   }
 
@@ -89,7 +99,8 @@ void Options::parseGlobaleOptions(int argc, char** argv) {
   }
 }
 
-void Options::parseLocalOptions(string& locales, string& inputFileName) {
+void Options::parseLocalOptions(const string& locales,
+                                const string& inputFileName) {
   Json::Value json;
   Json::CharReaderBuilder readerBuilder;
   unique_ptr<Json::CharReader> reader(readerBuilder.newCharReader());
@@ -128,6 +139,7 @@ void Options::parseLocalOptions(string& locales, string& inputFileName) {
       LOG(INFO) << "Sortbyvarname: " << sortByVarName;
     }
   } else {
+    cerr << "No correct formated input file!" << endl;
     LOG(ERROR) << "Fehler beim Parsen der lokalen Parameter: " << errors
                << endl;
   }

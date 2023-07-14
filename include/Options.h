@@ -1,21 +1,25 @@
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
+#include <easylogging++.h>
 #include <getopt.h>
+#include <jsoncpp/json/json.h>
 
-#include <string>
 #include <vector>
 
 using namespace std;
 
 namespace Codegenerator {
+/** class The `Options` class is responsible for parsing and storing the command
+ * line options and file options. It provides methods to access the values
+ * of these options. */
 class Options {
  public:
   Options();
   ~Options();
 
   void parseGlobaleOptions(int argc, char** argv);
-  void parseLocalOptions(string& locales, string& inputFileName);
+  void parseLocalOptions(const string& locales, const string& inputFileName);
 
   string getOutputFilename() const;
   string getOutputType() const;
@@ -60,6 +64,8 @@ class Options {
   static const char* const short_options;
 
   const char* const HELP_MESSAGE = R"(
+    Generates a header and source file from a given input file.
+
     Input: codegenerator [Options] [Files]
 
     Options:
@@ -79,9 +85,9 @@ class Options {
 
     Author Team:
       Timo Bauermeister
-      Jannik Kiebler-Schauer
       Marc Sachße
       Tobias Skoberla
+      (Jannik Kiebler-Schauer - exmatriculated)
 
     Contact:
       tobias.skoberla@gmail.com
