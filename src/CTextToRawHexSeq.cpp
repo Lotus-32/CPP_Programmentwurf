@@ -38,7 +38,7 @@ string CTextToRawHexSeq::writeDeclaration() {
   return declaration;
 }
 
-string CTextToRawHexSeq::writeImplementation() {
+string CTextToRawHexSeq::writeImplementation(int signperline) {
   string imp;
   stringstream ss;
 
@@ -63,14 +63,15 @@ string CTextToRawHexSeq::writeImplementation() {
     imp.pop_back();
   }
 
-  imp = "const char " + name + "[] = {\n" + wordWrap(imp, ' ', true) + "\n};\n";
+  imp = "const char " + name + "[] = {\n" +
+        wordWrap(imp, ' ', true, signperline) + "\n};\n";
 
   if (addtextsegment) {
     imp += getOriginalTextComment();
   }
 
   if (next != nullptr) {
-    return imp + "\n" + next->writeImplementation();
+    return imp + "\n" + next->writeImplementation(signperline);
   }
   return imp;
 }

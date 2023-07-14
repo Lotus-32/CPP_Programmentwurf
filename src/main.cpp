@@ -89,9 +89,10 @@ int main(int argc, char** argv) {
     // textToCPP->sort();
     LOG(INFO) << "Inhalt nach sort: \n"
               << textToCPP->writeDeclaration() << endl;
-
+    LOG(WARNING) << "Signperline: " << options.getSignPerLine() << endl;
     LOG(INFO) << "Implementierung: \n"
-              << textToCPP->writeImplementation() << endl;
+              << textToCPP->writeImplementation(options.getSignPerLine())
+              << endl;
 
     // ----Ende:-Testausgaben---------------------------------------------------
 

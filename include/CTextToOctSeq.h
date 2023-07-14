@@ -12,7 +12,7 @@ class CTextToOctSeq : public CTextToCPP {
                 string doxygen = "");
   ~CTextToOctSeq();
 
-  string writeImplementation() override;
+  string writeImplementation(int signperline) override;
 };
 
 }  // namespace Codegenerator

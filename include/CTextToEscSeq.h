@@ -12,7 +12,7 @@ class CTextToEscSeq : public CTextToCPP {
                 string doxygen = "");
   ~CTextToEscSeq();
 
-  string writeImplementation() override;
+  string writeImplementation(int signperline) override;
 };
 
 }  // namespace Codegenerator

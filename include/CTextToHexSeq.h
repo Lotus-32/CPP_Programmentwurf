@@ -12,7 +12,7 @@ class CTextToHexSeq : public CTextToCPP {
                 string doxygen = "");
   ~CTextToHexSeq();
 
-  string writeImplementation() override;
+  string writeImplementation(int signperline) override;
 };
 
 }  // namespace Codegenerator

@@ -40,7 +40,9 @@ string CTextToCPP::writeDeclaration() {
  *
  * @return string Content of the source file
  */
-string CTextToCPP::writeImplementation() { return next->writeImplementation(); }
+string CTextToCPP::writeImplementation(int signperline) {
+  return next->writeImplementation(signperline);
+}
 
 /**
  * @brief Adds an element to the concatenation

@@ -20,7 +20,7 @@ CTextToEscSeq::CTextToEscSeq(string name, string text, string nl,
 
 CTextToEscSeq::~CTextToEscSeq() {}
 
-string CTextToEscSeq::writeImplementation() {
+string CTextToEscSeq::writeImplementation(int signperline) {
   std::string imp;
 
   for (char c : text) {
@@ -81,15 +81,15 @@ string CTextToEscSeq::writeImplementation() {
     }
   }
 
-  imp = VAR_IMPLEMENTATION + name + " = {\n" + wordWrap(imp, ' ', false) +
-        "\n};\n";
+  imp = VAR_IMPLEMENTATION + name + " = {\n" +
+        wordWrap(imp, ' ', false, signperline) + "\n};\n";
 
   if (addtextsegment) {
     imp += getOriginalTextComment();
   }
 
   if (next != nullptr) {
-    return imp + "\n" + next->writeImplementation();
+    return imp + "\n" + next->writeImplementation(signperline);
   }
   return imp;
 }

@@ -13,7 +13,7 @@ class CTextToRawHexSeq : public CTextToCPP {
   ~CTextToRawHexSeq();
 
   string writeDeclaration() override;
-  string writeImplementation() override;
+  string writeImplementation(int signperline) override;
 };
 
 }  // namespace Codegenerator

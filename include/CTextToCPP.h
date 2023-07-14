@@ -33,7 +33,7 @@ class CTextToCPP {
   virtual ~CTextToCPP();
 
   virtual string writeDeclaration();
-  virtual string writeImplementation();
+  virtual string writeImplementation(int signperline);
   void addElement(CTextToCPP* element);
   void sort();
   void clear();

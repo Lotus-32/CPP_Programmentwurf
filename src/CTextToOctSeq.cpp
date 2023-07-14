@@ -19,7 +19,7 @@ CTextToOctSeq::CTextToOctSeq(string name, string text, string nl,
 
 CTextToOctSeq::~CTextToOctSeq() {}
 
-string CTextToOctSeq::writeImplementation() {
+string CTextToOctSeq::writeImplementation(int signperline) {
   string imp;
   stringstream ss;
 
@@ -41,15 +41,15 @@ string CTextToOctSeq::writeImplementation() {
     ss.str("");
   }
 
-  imp = VAR_IMPLEMENTATION + name + " = {\n" + wordWrap(imp, '\\', false) +
-        "\n};\n";
+  imp = VAR_IMPLEMENTATION + name + " = {\n" +
+        wordWrap(imp, '\\', false, signperline) + "\n};\n";
 
   if (addtextsegment) {
     imp += getOriginalTextComment();
   }
 
   if (next != nullptr) {
-    return imp + "\n" + next->writeImplementation();
+    return imp + "\n" + next->writeImplementation(signperline);
   }
   return imp;
 }
