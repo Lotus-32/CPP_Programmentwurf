@@ -1,5 +1,7 @@
 #include <CTextToHexSeq.h>
 
+#include <iomanip>
+
 namespace Codegenerator {
 
 CTextToHexSeq::CTextToHexSeq(string name, string text, int signperline,
@@ -27,7 +29,7 @@ string CTextToHexSeq::writeImplementation() {
   for (char c : text) {
     if (c == '\n') {
       if (nl == "DOS" || nl == "MAC") {
-        ss << hex << (int)'\r';
+        ss << hex << setw(2) << setfill('0') << (int)'\r';
         imp += "\\x";
         imp += ss.str();
         ss.str("");
@@ -36,7 +38,7 @@ string CTextToHexSeq::writeImplementation() {
         }
       }
     }
-    ss << hex << (int)c;
+    ss << hex << setw(2) << setfill('0') << (int)c;
     imp += "\\x";
     imp += ss.str();
     ss.str("");

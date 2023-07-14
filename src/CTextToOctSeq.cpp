@@ -1,5 +1,7 @@
 #include <CTextToOctSeq.h>
 
+#include <iomanip>
+
 namespace Codegenerator {
 
 CTextToOctSeq::CTextToOctSeq(string name, string text, int signperline,
@@ -27,7 +29,7 @@ string CTextToOctSeq::writeImplementation() {
   for (char c : text) {
     if (c == '\n') {
       if (nl == "DOS" || nl == "MAC") {
-        ss << oct << (int)'\r';
+        ss << oct << setw(3) << setfill('0') << (int)'\r';
         imp += "\\";
         imp += ss.str();
         ss.str("");
@@ -36,7 +38,7 @@ string CTextToOctSeq::writeImplementation() {
         }
       }
     }
-    ss << oct << (int)c;
+    ss << oct << setw(3) << setfill('0') << (int)c;
     imp += "\\";
     imp += ss.str();
     ss.str("");
