@@ -30,26 +30,26 @@ CTextToCPP *CCodegenerator::processVariableParams(
     string sequenz = json.get(VAR_SEQENZ, "").asString();
     if (sequenz == SEQENZ_ESC) {
       return new CTextToEscSeq(
-          varname, text, signPerLine, json.get(VAR_NEWLINE, NL_UNIX).asString(), lineNumber,
-          json.get(VAR_TEXTSEGMENT, false).asBool(),
+          varname, text, signPerLine, json.get(VAR_NEWLINE, NL_UNIX).asString(),
+          lineNumber, json.get(VAR_TEXTSEGMENT, false).asBool(),
           json.get(VAR_DOXYGEN, "").asString());
     }
     if (sequenz == SEQENZ_HEX) {
       return new CTextToHexSeq(
-          varname, text, signPerLine, json.get(VAR_NEWLINE, NL_UNIX).asString(), lineNumber,
-          json.get(VAR_TEXTSEGMENT, false).asBool(),
+          varname, text, signPerLine, json.get(VAR_NEWLINE, NL_UNIX).asString(),
+          lineNumber, json.get(VAR_TEXTSEGMENT, false).asBool(),
           json.get(VAR_DOXYGEN, "").asString());
     }
     if (sequenz == SEQENZ_OCT) {
       return new CTextToOctSeq(
-          varname, text, signPerLine, json.get(VAR_NEWLINE, NL_UNIX).asString(), lineNumber,
-          json.get(VAR_TEXTSEGMENT, false).asBool(),
+          varname, text, signPerLine, json.get(VAR_NEWLINE, NL_UNIX).asString(),
+          lineNumber, json.get(VAR_TEXTSEGMENT, false).asBool(),
           json.get(VAR_DOXYGEN, "").asString());
     }
     if (sequenz == SEQENZ_RAWHEX) {
       return new CTextToRawHexSeq(
-          varname, text, signPerLine, json.get(VAR_NEWLINE, NL_UNIX).asString(), lineNumber,
-          json.get(VAR_TEXTSEGMENT, false).asBool(),
+          varname, text, signPerLine, json.get(VAR_NEWLINE, NL_UNIX).asString(),
+          lineNumber, json.get(VAR_TEXTSEGMENT, false).asBool(),
           json.get(VAR_DOXYGEN, "").asString());
     }
     LOG(ERROR) << "Keine implementierte Sequenz" << errors << endl;
@@ -100,8 +100,8 @@ void CCodegenerator::processString(const string &fileContent,
   // Keine Tags vorhanden
   if (!(fileContent.find("@start") != string::npos &&
         fileContent.find("@end") != string::npos)) {
-    extractedTextToCPP->addElement(
-        new CTextToEscSeq(fileNameWithoutExt, fileContent, localeOptions->getSignPerLine()));
+    extractedTextToCPP->addElement(new CTextToEscSeq(
+        fileNameWithoutExt, fileContent, localeOptions->getSignPerLine()));
     return;
   }
 
@@ -167,6 +167,11 @@ void CCodegenerator::processString(const string &fileContent,
     }
     lineNumber++;
   }
+}
+
+string CCodegenerator::generateNamespace(const string &namespaceName,
+                                         const string &namespaceContent) {
+  return "namespace " + namespaceName + " {\n" + namespaceContent + "}";
 }
 
 }  // namespace Codegenerator

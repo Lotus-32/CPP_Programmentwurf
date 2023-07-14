@@ -69,21 +69,33 @@ int main(int argc, char** argv) {
     CCodegenerator* codegenerator = new CCodegenerator();
     codegenerator->processString(fileContent, file, textToCPP, localeOptions);
 
+    if (localeOptions->getSortByVarName()) {
+      textToCPP->sort();
+    }
+    string declaration = textToCPP->writeDeclaration();
+    string implementation = textToCPP->writeImplementation();
+    if (localeOptions->getNamespace() != "" &&
+        localeOptions->getOutputType() != "C") {
+      declaration = codegenerator->generateNamespace(
+          localeOptions->getNamespace(), declaration);
+      implementation = codegenerator->generateNamespace(
+          localeOptions->getNamespace(), implementation);
+    }
+
     // ----Testausgaben---------------------------------------------------
 
-    LOG(INFO) << "Inhalt: \n" << textToCPP->writeDeclaration() << endl;
-    textToCPP->sort();
-    LOG(INFO) << "Inhalt nach sort: \n"
-              << textToCPP->writeDeclaration() << endl;
-    textToCPP->addElement(new CTextToEscSeq("Test", "Hallo Welt",
-                                            localeOptions->getSignPerLine()));
-    textToCPP->addElement(new CTextToHexSeq("Ann_den_Anfang", "Hallo Welt",
-                                            localeOptions->getSignPerLine()));
-    textToCPP->sort();
-    LOG(INFO) << "Inhalt nach sort: \n"
-              << textToCPP->writeDeclaration() << endl;
-    LOG(INFO) << "Implementierung: \n"
-              << textToCPP->writeImplementation() << endl;
+    // LOG(INFO) << "Inhalt: \n" << textToCPP->writeDeclaration() << endl;
+    // textToCPP->sort();
+    // LOG(INFO) << "Inhalt nach sort: \n"
+    //           << textToCPP->writeDeclaration() << endl;
+    // textToCPP->addElement(new CTextToEscSeq("Test", "Hallo Welt",
+    //                                         localeOptions->getSignPerLine()));
+    // textToCPP->addElement(new CTextToHexSeq("Ann_den_Anfang", "Hallo Welt",
+    //                                         localeOptions->getSignPerLine()));
+    // textToCPP->sort();
+
+    LOG(INFO) << "Declaration mit Namespace: \n" << declaration << endl;
+    LOG(INFO) << "Implementierung mit Namespache: \n" << implementation << endl;
 
     // ----Ende:-Testausgaben---------------------------------------------------
 

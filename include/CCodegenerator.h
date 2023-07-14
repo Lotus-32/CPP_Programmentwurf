@@ -53,6 +53,9 @@ class CCodegenerator {
 
   void processString(const string& fileContent, const string& filename,
                      CTextToCPP* extractedTextToCPP, Options* localeOptions);
+
+  string generateNamespace(const string& namespaceName,
+                           const string& namespaceContent);
 };
 
 }  // namespace Codegenerator
