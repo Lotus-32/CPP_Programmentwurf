@@ -25,6 +25,8 @@ class Options {
   int getSignPerLine() const;
   bool getSortByVarName() const;
 
+  bool getIsSetOutputFilename() const;
+
   void setOutputFilename(string outputFilename);
   void setOutputType(string outputType);
   void setHeaderDir(string headerDir);

@@ -19,7 +19,7 @@ CTextToCPP *CCodegenerator::processVariableParams(
                     parameters.c_str() + parameters.length(), &json, &errors)) {
     string varname = json.get(VAR_NAME, inputFileName).asString();
     if (!json.isMember(VAR_NAME)) {
-      varname = toUpperCase(varname);
+      varname = toUpperCases(varname);
       varname += to_string((*unnamedVarCount)++);
     }
     bool addtextpos = json.get(VAR_TEXTPOS, false).asBool();
@@ -91,7 +91,7 @@ string CCodegenerator::getFileNameWithoutExtension(const string &filename) {
   return filename;
 }
 
-string CCodegenerator::toUpperCase(const string &input) {
+string CCodegenerator::toUpperCases(const string &input) {
   string output = input;
   transform(output.begin(), output.end(), output.begin(), ::toupper);
   return output;
@@ -188,7 +188,7 @@ string CCodegenerator::generateSourceHead(const string &filename,
 
 string CCodegenerator::generateHeaderSurroundings(const string &filename,
                                                   const string &fileContent) {
-  string nameCaps = toUpperCase(filename);
+  string nameCaps = toUpperCases(filename);
   return "#ifndef _" + nameCaps + "_\n#define _" + nameCaps + "_\n\n" +
          fileContent + "\n#endif";
 }

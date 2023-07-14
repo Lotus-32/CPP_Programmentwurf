@@ -9,6 +9,7 @@
 #include <getopt.h>
 #include <stdio.h>
 
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -41,13 +42,47 @@ void initLogging() {
   // LOG(FATAL) << "Hier fehlt z.B. schon der Speicher um weiterzu machen";
 }
 
+void createFile(const string& fileName, const string& content,
+                const string& path) {
+  string correctedPath = path;
+  replace(correctedPath.begin(), correctedPath.end(), '\\', '/');
+  LOG(DEBUG) << "Pfad: " << correctedPath << endl;
+
+  if (!filesystem::exists(correctedPath)) {
+    if (!filesystem::create_directories(correctedPath)) {
+      LOG(ERROR) << "Fehler beim Erstellen des Verzeichnisses: "
+                 << correctedPath << endl;
+      exit(1);
+    }
+  }
+
+  ofstream outputFile(correctedPath + "/" + fileName);
+  if (!outputFile) {
+    LOG(ERROR) << "Fehler beim Erstellen der Datei: " << fileName << endl;
+    exit(1);
+  }
+
+  outputFile << content;
+
+  LOG(INFO) << "Datei erstellt: " << correctedPath << fileName << endl;
+}
+
+string toLowerCases(const string& input) {
+  string output = input;
+  transform(output.begin(), output.end(), output.begin(), ::tolower);
+  return output;
+}
+
 int main(int argc, char** argv) {
   initLogging();
 
   CTextToCPP* textToCPP = new CTextToCPP();
-  Options* options = new Options();
-  options->parseGlobaleOptions(argc, argv);
-  vector<string> files = options->getFileNames();
+  Options* commandOptions = new Options();
+  commandOptions->parseGlobaleOptions(argc, argv);
+  vector<string> files = commandOptions->getFileNames();
+
+  string header = "";
+  string source = "";
 
   // Start of Codegenerator ---------------------------------------------
 
@@ -65,7 +100,7 @@ int main(int argc, char** argv) {
                        istreambuf_iterator<char>());
     inputFile.close();
 
-    Options* localeOptions = new Options(*options);
+    Options* localeOptions = new Options(*commandOptions);
     CCodegenerator* codegenerator = new CCodegenerator();
     codegenerator->processString(fileContent, file, textToCPP, localeOptions);
 
@@ -81,10 +116,21 @@ int main(int argc, char** argv) {
       implementation = codegenerator->generateNamespace(
           localeOptions->getNamespace(), implementation);
     }
-    declaration = codegenerator->generateHeaderSurroundings(
-        localeOptions->getOutputFilename(), declaration);
-    implementation = codegenerator->generateSourceHead(
-        localeOptions->getOutputFilename(), implementation);
+    if (commandOptions->getIsSetOutputFilename()) {
+      header += declaration;
+      source += implementation;
+    } else {
+      declaration = codegenerator->generateHeaderSurroundings(
+          localeOptions->getOutputFilename(), declaration);
+      implementation = codegenerator->generateSourceHead(
+          localeOptions->getOutputFilename(), implementation);
+
+      string sourceType = "." + toLowerCases(localeOptions->getOutputType());
+      createFile(localeOptions->getOutputFilename() + ".h", declaration,
+                 localeOptions->getHeaderDir());
+      createFile(localeOptions->getOutputFilename() + sourceType,
+                 implementation, localeOptions->getSourceDir());
+    }
 
     // ----Testausgaben---------------------------------------------------
 
@@ -98,8 +144,9 @@ int main(int argc, char** argv) {
     //                                         localeOptions->getSignPerLine()));
     // textToCPP->sort();
 
-    LOG(INFO) << "Declaration mit Namespace: \n" << declaration << endl;
-    LOG(INFO) << "Implementierung mit Namespache: \n" << implementation << endl;
+    // LOG(INFO) << "Declaration mit Namespace: \n" << declaration << endl;
+    // LOG(INFO) << "Implementierung mit Namespache: \n" << implementation <<
+    // endl;
 
     // ----Ende:-Testausgaben---------------------------------------------------
 

@@ -47,7 +47,7 @@ class CCodegenerator {
 
   string getFileNameWithoutExtension(const string& filename);
 
-  string toUpperCase(const string& input);
+  string toUpperCases(const string& input);
 
  public:
   CCodegenerator();

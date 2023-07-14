@@ -147,6 +147,8 @@ int Options::getSignPerLine() const { return signPerLine; }
 
 bool Options::getSortByVarName() const { return sortByVarName; }
 
+bool Options::getIsSetOutputFilename() const { return isSetOutputFilename; }
+
 void Options::setOutputFilename(string outputFilename) {
   if (!isSetOutputFilename) {
     this->outputFilename = outputFilename;
