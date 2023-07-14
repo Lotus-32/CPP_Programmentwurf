@@ -63,7 +63,7 @@ string CTextToRawHexSeq::writeImplementation() {
     imp.pop_back();
   }
 
-  imp = "const char " + name + "[] = {\n" + imp + "\n};\n";
+  imp = "const char " + name + "[] = {\n" + wordWrap(imp, ' ', true) + "\n};\n";
 
   if (addtextsegment) {
     imp += getOriginalTextComment();

@@ -26,6 +26,7 @@ class CTextToCPP {
   string doxygen;
   string text;
   string getOriginalTextComment();
+  string wordWrap(string text, char cut, bool isRaw, int maxLineLength = 60);
 
  public:
   CTextToCPP();
@@ -41,6 +42,7 @@ class CTextToCPP {
 
  private:
   void insert(CTextToCPP*& sortedList, CTextToCPP* newElement);
+  // int breakLine(const string& text, int pos, int max);
 };
 
 }  // namespace Codegenerator

@@ -41,7 +41,8 @@ string CTextToHexSeq::writeImplementation() {
     ss.str("");
   }
 
-  imp = VAR_IMPLEMENTATION + name + " = {\n\"" + imp + "\"\n};\n";
+  imp = VAR_IMPLEMENTATION + name + " = {\n" + wordWrap(imp, '\\', false) +
+        "\n};\n";
 
   if (addtextsegment) {
     imp += getOriginalTextComment();
