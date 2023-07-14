@@ -5,6 +5,10 @@
 
 namespace Codegenerator {
 
+/**
+ * @brief Converts the variable text to a C-String with escape sequences
+ *
+ */
 class CTextToEscSeq : public CTextToCPP {
  public:
   CTextToEscSeq(string name, string text, int signperline, string nl = "UNIX",

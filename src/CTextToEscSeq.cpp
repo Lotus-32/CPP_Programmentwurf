@@ -2,6 +2,23 @@
 
 namespace Codegenerator {
 
+/**
+ * The CTextToEscSeq constructor initializes the member variables of the class.
+ *
+ * @param name The name of the CTextToEscSeq variable.
+ * @param text The "text" parameter is a string that represents the input text
+ * that needs to be converted.
+ * @param signperline The "signperline" parameter specifies the number of
+ * characters to be displayed per line after converting.
+ * @param nl The "nl" parameter stands for "new line" and it represents the
+ * the operating system of the new line.
+ * @param addtextpos The parameter "addtextpos" is an integer that represents
+ * the position at which the variable was in the source file.
+ * @param addtextsegment A boolean flag indicating whether to add the original
+ * text as a comment.
+ * @param doxygen The "doxygen" parameter is a string that represents the
+ * doxygen documentation for the variable.
+ */
 CTextToEscSeq::CTextToEscSeq(string name, string text, int signperline,
                              string nl, int addtextpos, bool addtextsegment,
                              string doxygen) {
@@ -21,6 +38,13 @@ CTextToEscSeq::CTextToEscSeq(string name, string text, int signperline,
 
 CTextToEscSeq::~CTextToEscSeq() {}
 
+/**
+ * The function `writeImplementation` converts special characters in a given
+ * text into their corresponding escape sequences and returns the implementation
+ * code for the converted text.
+ *
+ * @return a string that represents the implementation of the variable.
+ */
 string CTextToEscSeq::writeImplementation() {
   std::string imp;
 

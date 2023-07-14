@@ -5,6 +5,10 @@
 
 namespace Codegenerator {
 
+/**
+ * @brief Converts the variable text to a C-String with octal sequences
+ *
+ */
 class CTextToOctSeq : public CTextToCPP {
  public:
   CTextToOctSeq(string name, string text, int signperline, string nl = "UNIX",

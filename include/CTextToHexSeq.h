@@ -5,6 +5,10 @@
 
 namespace Codegenerator {
 
+/**
+ * @brief Converts the variable text to a C-String with hex sequences
+ *
+ */
 class CTextToHexSeq : public CTextToCPP {
  public:
   CTextToHexSeq(string name, string text, int signperline, string nl = "UNIX",

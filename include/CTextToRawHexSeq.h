@@ -5,11 +5,15 @@
 
 namespace Codegenerator {
 
+/**
+ * @brief Converts the variable text to a raw hex sequence
+ *
+ */
 class CTextToRawHexSeq : public CTextToCPP {
  public:
-  CTextToRawHexSeq(string name, string text, int signperline, string nl = "UNIX",
-                int addtextpos = 0, bool addtextsegment = false,
-                string doxygen = "");
+  CTextToRawHexSeq(string name, string text, int signperline,
+                   string nl = "UNIX", int addtextpos = 0,
+                   bool addtextsegment = false, string doxygen = "");
   ~CTextToRawHexSeq();
 
   string writeDeclaration() override;
