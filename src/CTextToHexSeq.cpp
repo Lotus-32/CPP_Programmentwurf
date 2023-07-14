@@ -35,6 +35,10 @@ CTextToHexSeq::CTextToHexSeq(string name, string text, int signperline,
   LOG(DEBUG) << "CTextToHexSeq: " << name << " " << nl << " " << addtextpos
              << " " << addtextsegment << " " << doxygen << "\n"
              << text;
+  if (text == "") {
+    cerr << "Error: The input file is not formatted correctly" << endl;
+    exit(1);
+  }
 }
 
 CTextToHexSeq::~CTextToHexSeq() {}

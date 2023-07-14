@@ -34,6 +34,11 @@ CTextToEscSeq::CTextToEscSeq(string name, string text, int signperline,
              << this->addtextpos << " " << this->addtextsegment << " "
              << this->doxygen << "\n"
              << this->text;
+
+  if (text == "") {
+    cerr << "Error: The input file is not formatted correctly" << endl;
+    exit(1);
+  }
 }
 
 CTextToEscSeq::~CTextToEscSeq() {}

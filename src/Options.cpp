@@ -53,6 +53,7 @@ void Options::parseGlobaleOptions(int argc, char** argv) {
         outputType = optarg;
         if (outputType != "C" && outputType != "CPP") {
           cerr << "Invalid output type: " << outputType << endl;
+          exit(1);
           break;
         }
         isSetOutputType = true;
@@ -84,12 +85,14 @@ void Options::parseGlobaleOptions(int argc, char** argv) {
         LOG(INFO) << "Sortbyvarname: true";
         break;
       case '?':
-        cerr << "Unknown option: " << optopt << endl;
+        cerr << "Unknown option! "
+             << "\nHere are correct ones: " << endl;
+        printHelp();
     }
   }
 
   if (optind == argc) {
-    LOG(ERROR) << "Keine Dateien angegeben.";
+    cerr << "No files specified. Options: " << endl;
     printHelp();
   }
 
@@ -151,8 +154,7 @@ void Options::parseLocalOptions(const string& locales,
     }
   } else {
     cerr << "No correct formated input file!" << endl;
-    LOG(ERROR) << "Fehler beim Parsen der lokalen Parameter: " << errors
-               << endl;
+    return;
   }
 }
 

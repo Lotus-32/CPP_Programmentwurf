@@ -68,7 +68,8 @@ void createFile(const string& fileName, const string& content,
 
   outputFile << content;
 
-  LOG(INFO) << "File created: " << correctedPath << fileName << endl;
+  cout << "File \"" << fileName << "\" created successfully in: \"" << path
+       << "\"" << endl;
 }
 
 /**
@@ -117,7 +118,7 @@ int main(int argc, char** argv) {
     if (!inputFile) {
       LOG(ERROR) << "Error opening the file: " << file << endl;
       cerr << "Error opening the file: " << file << endl;
-      continue;
+      exit(1);
     }
 
     string fileContent((istreambuf_iterator<char>(inputFile)),

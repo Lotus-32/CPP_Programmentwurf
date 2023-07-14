@@ -53,10 +53,10 @@ CTextToCPP *CCodegenerator::processVariableParams(
           json.get(VAR_DOXYGEN, "").asString());
     }
     cerr << "Thats not an implemented sequence!" << errors << endl;
-    return nullptr;
+    exit(1);
   } else {
     cerr << "Error parsing attribute parameters: " << errors << endl;
-    return nullptr;
+    exit(1);
   }
 }
 
@@ -118,7 +118,7 @@ void CCodegenerator::processString(const string &fileContent,
       extractContentBetweenTags(fileContent, "@start\n", "@end\n");
   if (extractedContent.empty()) {
     cerr << "Din't find any parameters!" << endl;
-    return;
+    exit(1);
   }
 
   string variable_options;
@@ -141,6 +141,9 @@ void CCodegenerator::processString(const string &fileContent,
         std::string content = line.substr(start, end - start + 1);
         if (!content.empty()) {
           localeOptions->parseLocalOptions(content, fileNameWithoutExt);
+        } else {
+          cerr << "Error: options not correclty formatted!" << endl;
+          exit(1);
         }
       }
     }
