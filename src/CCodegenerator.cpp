@@ -96,7 +96,7 @@ string CCodegenerator::getFileNameWithoutExtension(const string &filename) {
 void CCodegenerator::processString(const string &fileContent,
                                    const string &filename,
                                    CTextToCPP *extractedTextToCPP,
-                                   string *extractedGlobales) {
+                                   Options *localeOptions) {
   string fileNameWithoutExt = getFileNameWithoutExtension(filename);
 
   // Keine Tags vorhanden
@@ -133,7 +133,10 @@ void CCodegenerator::processString(const string &fileContent,
           start < end) {
         // Extrahieren des Inhalts mit den geschweiften Klammern
         std::string content = line.substr(start, end - start + 1);
-        *extractedGlobales += content + "\n";
+        // *extractedGlobales += content + "\n";
+        if (!content.empty()) {
+          localeOptions->parseLocalOptions(content, fileNameWithoutExt);
+        }
       }
     }
     if (line.find(TAG_VAR) != string::npos) {

@@ -44,12 +44,10 @@ void initLogging() {
 int main(int argc, char** argv) {
   initLogging();
 
-  Options options;
-  options.parseGlobaleOptions(argc, argv);
-
-  vector<string> files = options.getFileNames();
-
   CTextToCPP* textToCPP = new CTextToCPP();
+  Options* options = new Options();
+  options->parseGlobaleOptions(argc, argv);
+  vector<string> files = options->getFileNames();
 
   // Start of Codegenerator ---------------------------------------------
 
@@ -67,14 +65,9 @@ int main(int argc, char** argv) {
                        istreambuf_iterator<char>());
     inputFile.close();
 
-    string* locales = new string();
+    Options* localeOptions = new Options(*options);
     CCodegenerator* codegenerator = new CCodegenerator();
-    codegenerator->processString(fileContent, file, textToCPP, locales);
-
-    if (!locales->empty()) {
-      LOG(INFO) << "Globale Variablen: \n" << *locales << endl;
-      options.parseLocalOptions(*locales, file);
-    }
+    codegenerator->processString(fileContent, file, textToCPP, localeOptions);
 
     // ----Testausgaben---------------------------------------------------
 
@@ -89,15 +82,14 @@ int main(int argc, char** argv) {
     // textToCPP->sort();
     LOG(INFO) << "Inhalt nach sort: \n"
               << textToCPP->writeDeclaration() << endl;
-    LOG(WARNING) << "Signperline: " << options.getSignPerLine() << endl;
     LOG(INFO) << "Implementierung: \n"
-              << textToCPP->writeImplementation(options.getSignPerLine())
+              << textToCPP->writeImplementation(localeOptions->getSignPerLine())
               << endl;
 
     // ----Ende:-Testausgaben---------------------------------------------------
 
     delete codegenerator;
-    delete locales;
+    delete localeOptions;
     textToCPP->clear();
   }
   delete textToCPP;

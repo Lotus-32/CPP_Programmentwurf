@@ -101,37 +101,30 @@ void Options::parseLocalOptions(string& locales, string& inputFileName) {
                     &errors)) {
     if (!isSetOutputFilename) {
       outputFilename = json.get("outputfilename", inputFileName).asString();
-      isSetOutputFilename = true;
       LOG(INFO) << "Outputfilename: " << inputFileName;
     }
     if (!isSetOutputType) {
       outputType = json.get("outputtype", outputType).asString();
-      isSetOutputType = true;
       LOG(INFO) << "Outputtype: " << outputType;
     }
     if (!isSetHeaderDir) {
       headerDir = json.get("headerdir", headerDir).asString();
-      isSetHeaderDir = true;
       LOG(INFO) << "Headerdir: " << headerDir;
     }
     if (!isSetSourceDir) {
       sourceDir = json.get("sourcedir", sourceDir).asString();
-      isSetSourceDir = true;
       LOG(INFO) << "Sourcedir: " << sourceDir;
     }
     if (!isSetNamespace) {
       namespaceStr = json.get("namespace", namespaceStr).asString();
-      isSetNamespace = true;
       LOG(INFO) << "Namespace: " << namespaceStr;
     }
     if (!isSetSignPerLine) {
       signPerLine = json.get("signperline", signPerLine).asInt();
-      isSetSignPerLine = true;
       LOG(INFO) << "Signperline: " << signPerLine;
     }
     if (!isSetSortByVarName) {
       sortByVarName = json.get("sortbyvarname", sortByVarName).asBool();
-      isSetSortByVarName = true;
       LOG(INFO) << "Sortbyvarname: " << sortByVarName;
     }
   } else {

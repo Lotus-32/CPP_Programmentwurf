@@ -6,6 +6,7 @@
 #include <CTextToHexSeq.h>
 #include <CTextToOctSeq.h>
 #include <CTextToRawHexSeq.h>
+#include <Options.h>
 #include <easylogging++.h>
 #include <jsoncpp/json/json.h>
 
@@ -50,7 +51,7 @@ class CCodegenerator {
   ~CCodegenerator();
 
   void processString(const string& fileContent, const string& filename,
-                     CTextToCPP* extractedTextToCPP, string* extractedGlobales);
+                     CTextToCPP* extractedTextToCPP, Options* localeOptions);
 };
 
 }  // namespace Codegenerator
