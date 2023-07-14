@@ -81,9 +81,6 @@ int main(int argc, char** argv) {
   commandOptions->parseGlobaleOptions(argc, argv);
   vector<string> files = commandOptions->getFileNames();
 
-  string header = "";
-  string source = "";
-
   // Start of Codegenerator ---------------------------------------------
 
   for (string file : files) {
@@ -116,22 +113,17 @@ int main(int argc, char** argv) {
       implementation = codegenerator->generateNamespace(
           localeOptions->getNamespace(), implementation);
     }
-    if (commandOptions->getIsSetOutputFilename()) {
-      header += declaration;
-      source += implementation;
-    } else {
-      declaration = codegenerator->generateHeaderSurroundings(
-          localeOptions->getOutputFilename(), declaration);
-      implementation = codegenerator->generateSourceHead(
-          localeOptions->getOutputFilename(), implementation);
 
-      string sourceType = "." + toLowerCases(localeOptions->getOutputType());
-      createFile(localeOptions->getOutputFilename() + ".h", declaration,
-                 localeOptions->getHeaderDir());
-      createFile(localeOptions->getOutputFilename() + sourceType,
-                 implementation, localeOptions->getSourceDir());
-    }
+    declaration = codegenerator->generateHeaderSurroundings(
+        localeOptions->getOutputFilename(), declaration);
+    implementation = codegenerator->generateSourceHead(
+        localeOptions->getOutputFilename(), implementation);
 
+    string sourceType = "." + toLowerCases(localeOptions->getOutputType());
+    createFile(localeOptions->getOutputFilename() + ".h", declaration,
+               localeOptions->getHeaderDir());
+    createFile(localeOptions->getOutputFilename() + sourceType, implementation,
+               localeOptions->getSourceDir());
     // ----Testausgaben---------------------------------------------------
 
     // LOG(INFO) << "Inhalt: \n" << textToCPP->writeDeclaration() << endl;
