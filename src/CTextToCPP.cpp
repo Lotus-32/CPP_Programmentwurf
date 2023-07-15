@@ -145,22 +145,20 @@ string CTextToCPP::getOriginalTextComment() {
 }
 
 /**
- * The function `wordWrap` takes a string `text` and wraps it into multiple
- * lines with a maximum line length of `maxLineLength`, using the character
- * `cut` as a delimiter.
+ * The virtual function `wordWrap` takes a string `text`, a character `cut`, and
+ * an integer `maxLineLength` as input, and returns a new string with the text
+ * wrapped at the specified line length, using the specified character as the
+ * cut point.
  *
- * @param text The input text that needs to be wrapped into multiple lines.
+ * @param text The `text` parameter is the input string that needs to be wrapped
+ * into multiple lines.
  * @param cut The "cut" parameter is a character that is used to determine where
  * to wrap the text. When the "cut" character is encountered, the text will be
  * wrapped at that point.
- * @param isRaw The "isRaw" parameter is a boolean flag that indicates whether
- * the text should be treated as raw text or not. If "isRaw" is true, the text
- * will be wrapped without any additional formatting. If "isRaw" is false, the
- * text will be wrapped with double quotes.
- * @param maxLineLength The parameter `maxLineLength` is an integer that
- * specifies the maximum length of each line in the wrapped text.
+ * @param maxLineLength The `maxLineLength` parameter specifies the maximum
+ * length of each line in the wrapped text.
  *
- * @return a string, which is the wrapped text.
+ * @return the wrapped text, which is a string.
  */
 string CTextToCPP::wordWrap(string text, const char cut, int maxLineLength) {
   string wrappedText;

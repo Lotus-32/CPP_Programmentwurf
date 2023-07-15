@@ -123,6 +123,21 @@ string CTextToRawHexSeq::writeImplementation() {
   return imp;
 }
 
+/**
+ * The function `wordWrap` overrides the `wordWrap` function from CTextToCPP
+ * takes a string `text`, a character `cut`, and an integer `maxLineLength` as
+ * input, and returns a new string with line breaks inserted at appropriate
+ * positions to ensure that no line exceeds the specified maximum line length.
+ *
+ * @param text The input text that needs to be wrapped into multiple lines.
+ * @param cut The "cut" parameter is a character that is used to determine where
+ * to wrap the text. When the character specified by "cut" is encountered, the
+ * text will be wrapped to the next line.
+ * @param maxLineLength The `maxLineLength` parameter specifies the maximum
+ * length of each line in the wrapped text.
+ *
+ * @return the wrapped text, which is a string.
+ */
 string CTextToRawHexSeq::wordWrap(string text, const char cut,
                                   int maxLineLength) {
   string wrappedText;

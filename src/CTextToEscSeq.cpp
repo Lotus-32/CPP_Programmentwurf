@@ -135,6 +135,20 @@ string CTextToEscSeq::writeImplementation() {
   return imp;
 }
 
+/**
+ * The function `wordWrap` overrides the `wordWrap` function from CTextToCPP
+ * takes a string `text`, ignores the character `cut`, and an integer
+ * `maxLineLength` as input, and returns a string `wrappedText` that wraps the
+ * input text into multiple lines with a maximum line length. It can start a new
+ * line at any character, except ther is a escape sequence.
+ *
+ * @param text The input text that needs to be wrapped into multiple lines.
+ * @param cut The "cut" parameter is ignored in this function.
+ * @param maxLineLength The `maxLineLength` parameter specifies the maximum
+ * length of each line in the wrapped text.
+ *
+ * @return a string that represents the wrapped text.
+ */
 string CTextToEscSeq::wordWrap(string text, const char cut, int maxLineLength) {
   string wrappedText;
   int lineLength = 0;
