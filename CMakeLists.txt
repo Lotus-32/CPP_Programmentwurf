@@ -20,7 +20,6 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 IF(MINGW)
 # Include JSONCPP
 include_directories(C:/src/jsoncpp/include)
-link_directories(C:/src/jsoncpp/build/lib)
 ELSE()
 # UNIX finds it automatically
 ENDIF()
@@ -33,7 +32,7 @@ add_subdirectory(src)
 
 # Link the executable to the libraries
 IF(MINGW)
-    target_link_libraries(${PROJECT_NAME} ctexttocpp easylogginglib jsoncpp.dll)
+    target_link_libraries(${PROJECT_NAME} ctexttocpp easylogginglib C:/src/jsoncpp/build/lib/libjsoncpp.a)
 ELSE(MINGW)
     target_link_libraries(${PROJECT_NAME} ctexttocpp easylogginglib jsoncpp)
 ENDIF()
