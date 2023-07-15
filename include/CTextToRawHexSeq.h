@@ -29,6 +29,9 @@ class CTextToRawHexSeq : public CTextToCPP {
 
   string writeDeclaration() override;
   string writeImplementation() override;
+
+ private:
+  string wordWrap(string text, const char cut, int maxLineLength) override;
 };
 
 }  // namespace Codegenerator

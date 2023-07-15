@@ -81,7 +81,7 @@ string CTextToHexSeq::writeImplementation() {
   }
 
   imp = VAR_IMPLEMENTATION + name + " = {\n" +
-        wordWrap(imp, '\\', false, signperline) + "\n};\n";
+        wordWrap(imp, '\\', signperline) + "\n};\n";
 
   if (addtextsegment) {
     imp += getOriginalTextComment();

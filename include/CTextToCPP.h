@@ -38,8 +38,7 @@ class CTextToCPP {
   string text;
   int signperline;
   string getOriginalTextComment();
-  string wordWrap(string text, const char cut, const bool isRaw,
-                  int maxLineLength = 60);
+  virtual string wordWrap(string text, const char cut, int maxLineLength = 60);
 
  public:
   CTextToCPP();

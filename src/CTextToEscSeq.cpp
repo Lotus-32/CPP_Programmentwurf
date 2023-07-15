@@ -122,8 +122,8 @@ string CTextToEscSeq::writeImplementation() {
     }
   }
 
-  imp = VAR_IMPLEMENTATION + name + " = {\n" +
-        wordWrap(imp, ' ', false, signperline) + "\n};\n";
+  imp = VAR_IMPLEMENTATION + name + " = {\n" + wordWrap(imp, ' ', signperline) +
+        "\n};\n";
 
   if (addtextsegment) {
     imp += getOriginalTextComment();
@@ -133,6 +133,34 @@ string CTextToEscSeq::writeImplementation() {
     return imp + "\n" + next->writeImplementation();
   }
   return imp;
+}
+
+string CTextToEscSeq::wordWrap(string text, const char cut, int maxLineLength) {
+  string wrappedText;
+  int lineLength = 0;
+  bool inEscapeSequence = false;
+
+  for (int i = 0; i < text.length(); i++) {
+    if (text[i] == '\\' && !inEscapeSequence) {
+      inEscapeSequence = true;
+    } else {
+      inEscapeSequence = false;
+    }
+
+    if (lineLength >= maxLineLength && !inEscapeSequence ||
+        lineLength + 1 >= maxLineLength && inEscapeSequence) {
+      wrappedText += "\"" + text.substr(0, i) + "\" \\\n";
+      text = text.substr(i);
+      lineLength = 0;
+      i = -1;  // Resetting the loop index to start from the beginning
+    }
+
+    lineLength++;
+  }
+
+  wrappedText += "\"" + text + "\"";
+
+  return wrappedText;
 }
 
 }  // namespace Codegenerator

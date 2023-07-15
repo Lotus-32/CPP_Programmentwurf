@@ -162,8 +162,7 @@ string CTextToCPP::getOriginalTextComment() {
  *
  * @return a string, which is the wrapped text.
  */
-string CTextToCPP::wordWrap(string text, const char cut, const bool isRaw,
-                            int maxLineLength) {
+string CTextToCPP::wordWrap(string text, const char cut, int maxLineLength) {
   string wrappedText;
   int lineLength = 0;
   int lastSpace = 0;
@@ -174,11 +173,7 @@ string CTextToCPP::wordWrap(string text, const char cut, const bool isRaw,
     }
 
     if (lineLength >= maxLineLength) {
-      if (isRaw) {
-        wrappedText += text.substr(0, lastSpace) + " \\\n";
-      } else {
-        wrappedText += "\"" + text.substr(0, lastSpace) + "\" \\\n";
-      }
+      wrappedText += "\"" + text.substr(0, lastSpace) + "\" \\\n";
       text = text.substr(lastSpace);
       lineLength = 0;
       i = 0;
@@ -187,13 +182,7 @@ string CTextToCPP::wordWrap(string text, const char cut, const bool isRaw,
     lineLength++;
   }
 
-  if (isRaw) {
-    wrappedText += text;
-  } else {
-    wrappedText += "\"" + text + "\"";
-  }
-
-  return wrappedText;
+  return wrappedText + "\"" + text + "\"";
 }
 
 }  // namespace Codegenerator

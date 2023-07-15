@@ -110,8 +110,8 @@ string CTextToRawHexSeq::writeImplementation() {
     imp.pop_back();
   }
 
-  imp = "const char " + name + "[] = {\n" +
-        wordWrap(imp, ' ', true, signperline) + "\n};\n";
+  imp = "const char " + name + "[] = {\n" + wordWrap(imp, ' ', signperline) +
+        "\n};\n";
 
   if (addtextsegment) {
     imp += getOriginalTextComment();
@@ -121,6 +121,31 @@ string CTextToRawHexSeq::writeImplementation() {
     return imp + "\n" + next->writeImplementation();
   }
   return imp;
+}
+
+string CTextToRawHexSeq::wordWrap(string text, const char cut,
+                                  int maxLineLength) {
+  string wrappedText;
+  int lineLength = 0;
+  int lastSpace = 0;
+
+  for (int i = 0; i < text.length(); i++) {
+    if (text[i] == cut) {
+      lastSpace = i;
+    }
+
+    if (lineLength >= maxLineLength) {
+      wrappedText += text.substr(0, lastSpace) + " \\\n";
+
+      text = text.substr(lastSpace);
+      lineLength = 0;
+      i = 0;
+    }
+
+    lineLength++;
+  }
+
+  return wrappedText + text;
 }
 
 }  // namespace Codegenerator
