@@ -21,7 +21,12 @@
 #include <CTextToRawHexSeq.h>
 #include <Options.h>
 #include <easylogging++.h>
+
+#ifndef _WIN32
 #include <jsoncpp/json/json.h>
+#else
+#include <json/json.h>
+#endif
 
 using namespace std;
 

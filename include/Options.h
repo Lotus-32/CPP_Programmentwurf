@@ -15,7 +15,12 @@
 
 #include <easylogging++.h>
 #include <getopt.h>
+
+#ifndef _WIN32
 #include <jsoncpp/json/json.h>
+#else
+#include <json/json.h>
+#endif
 
 #include <vector>
 
