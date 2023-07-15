@@ -14,18 +14,19 @@
 #include <Options.h>
 #include <easylogging++.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #include <fstream>
 #include <iostream>
 #include <sstream>
 
-
-#ifndef _WIN32
-#include <filesystem>
-namespace fs = std::filesystem;
-#else
-#include <unistd.h>
+// Cross-platform directory creation
+#ifdef _WIN32
 #include <sys/stat.h>
+#define CREATE_DIRECTORY(path) mkdir(path)
+#else
+#include <sys/types.h>
+#define CREATE_DIRECTORY(path) mkdir(path, 0700)
 #endif
 
 using namespace std;
@@ -57,12 +58,14 @@ void initLogging() {
 }
 
 /**
- * The function "pathExists" checks if a file or directory exists at the given path.
- * 
- * @param path The path parameter is a string that represents the file or directory path that we want
- * to check for existence.
- * 
- * @return a boolean value. It returns true if the path exists and false if it does not exist.
+ * The function "pathExists" checks if a file or directory exists at the given
+ * path.
+ *
+ * @param path The path parameter is a string that represents the file or
+ * directory path that we want to check for existence.
+ *
+ * @return a boolean value. It returns true if the path exists and false if it
+ * does not exist.
  */
 bool pathExists(const string& path) {
   if (access(path.c_str(), F_OK) != -1) {
@@ -74,25 +77,23 @@ bool pathExists(const string& path) {
 
 /**
  * The function creates directories recursively based on a given path.
- * 
- * @param path The `path` parameter is a string that represents the directory path that needs to be
- * created.
+ *
+ * @param path The `path` parameter is a string that represents the directory
+ * path that needs to be created.
  */
-void createDirectories(const std::string& path) {
-    std::string subPath;
-    for (int i = 0; i < path.length(); i++) {
-        if (path[i] == '/') {
-            if (!pathExists(subPath)) {
-                std::cout << "Creating directory: " << subPath << std::endl;
-                mkdir(subPath.c_str());
-            }
-        }
-        subPath += path[i];
+void createDirectories(const string& path) {
+  string subPath;
+  for (int i = 0; i < path.length(); i++) {
+    if (path[i] == '/') {
+      if (!pathExists(subPath)) {
+        CREATE_DIRECTORY(subPath.c_str());
+      }
     }
-    if (!pathExists(subPath)) {
-        std::cout << "Creating directory: " << subPath << std::endl;
-        mkdir(subPath.c_str());
-    }
+    subPath += path[i];
+  }
+  if (!pathExists(subPath)) {
+    CREATE_DIRECTORY(subPath.c_str());
+  }
 }
 
 /**
@@ -109,18 +110,9 @@ void createFile(const string& fileName, const string& content,
   replace(correctedPath.begin(), correctedPath.end(), '\\', '/');
   LOG(DEBUG) << "Path: " << correctedPath << endl;
 
-#ifndef _WIN32
-  if (!fs::exists(correctedPath)) {
-    if (!fs::create_directories(correctedPath)) {
-      cerr << "Error creating the directory: " << correctedPath << endl;
-      exit(1);
-    }
+  if (!pathExists(correctedPath)) {
+    createDirectories(correctedPath);
   }
-#else
-if (!pathExists(correctedPath)) {
-  createDirectories(correctedPath);
-}
-#endif
 
   ofstream outputFile(correctedPath + "/" + fileName);
   if (!outputFile) {
@@ -215,9 +207,10 @@ int main(int argc, char** argv) {
 
     string sourceType = "." + toLowerCases(localeOptions->getOutputType());
 
-    LOG(INFO) << "Header path exists: " << pathExists(localeOptions->getHeaderDir())
-              << endl;
-    LOG(INFO) << "Source path exists: " << pathExists(localeOptions->getSourceDir()) << endl;
+    LOG(INFO) << "Header path exists: "
+              << pathExists(localeOptions->getHeaderDir()) << endl;
+    LOG(INFO) << "Source path exists: "
+              << pathExists(localeOptions->getSourceDir()) << endl;
     createFile(localeOptions->getOutputFilename() + ".h", declaration,
                localeOptions->getHeaderDir());
     createFile(localeOptions->getOutputFilename() + sourceType, implementation,
