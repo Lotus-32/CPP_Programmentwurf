@@ -4,10 +4,17 @@
 #include <easylogging++.h>
 #include <stdio.h>
 
-#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <sstream>
+
+#ifndef _WIN32
+#include <filesystem>
+namespace fs = std::filesystem;
+#else
+#include <direct.h>
+#define CREATE_DIRECTORY(path) _mkdir(path)
+#endif
 
 using namespace std;
 using namespace Codegenerator;
@@ -51,22 +58,28 @@ void createFile(const string& fileName, const string& content,
   replace(correctedPath.begin(), correctedPath.end(), '\\', '/');
   LOG(DEBUG) << "Path: " << correctedPath << endl;
 
-  if (!filesystem::exists(correctedPath)) {
-    if (!filesystem::create_directories(correctedPath)) {
-      LOG(ERROR) << "Error creating the directory: " << correctedPath << endl;
+#ifndef _WIN32
+  if (!fs::exists(correctedPath)) {
+    if (!fs::create_directories(correctedPath)) {
       cerr << "Error creating the directory: " << correctedPath << endl;
       exit(1);
     }
   }
+#else
+  if (CREATE_DIRECTORY(correctedPath.c_str()) != 0) {
+    cerr << "Error creating the directory: " << correctedPath << endl;
+    exit(1);
+  }
+#endif
 
   ofstream outputFile(correctedPath + "/" + fileName);
   if (!outputFile) {
-    LOG(ERROR) << "Error creating the file: " << fileName << endl;
     cerr << "Error creating the file: " << fileName << endl;
     exit(1);
   }
 
   outputFile << content;
+  outputFile.close();
 
   cout << "File \"" << fileName << "\" created successfully in: \"" << path
        << "\"" << endl;
