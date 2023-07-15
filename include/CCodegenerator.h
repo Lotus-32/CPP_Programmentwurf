@@ -1,3 +1,16 @@
+/**
+ * @file CCodegenerator.h
+ * @author Tobias Skoberla
+ * @brief Parses the content of the input file and generates CTexToCPP objects
+ * vor the variables and completes the options. It has also various functions to
+ * complete the generated source code.
+ * @version 1.0
+ * @date 15-07-2023
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 #ifndef CCODEGENERATOR_H
 #define CCODEGENERATOR_H
 

@@ -1,3 +1,15 @@
+/**
+ * @file Options.h
+ * @author Timo Bauermeister
+ * @brief Responsible for parsing and storing the command line options and file
+ * options.
+ * @version 1.0
+ * @date 15-07-2023
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 #ifndef OPTIONS_H
 #define OPTIONS_H
 

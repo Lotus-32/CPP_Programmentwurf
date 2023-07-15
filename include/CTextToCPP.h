@@ -1,9 +1,20 @@
+/**
+ * @file CTextToCPP.h
+ * @author Marc Sachße
+ * @brief Base class for converting text to C or C++ code
+ * @version 1.0
+ * @date 15-07-2023
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 #ifndef CTEXTTOCPP_H
 #define CTEXTTOCPP_H
 
 #include <easylogging++.h>
 
-#include <string>
+#include <iomanip>
 
 using namespace std;
 

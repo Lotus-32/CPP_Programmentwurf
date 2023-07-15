@@ -1,6 +1,15 @@
-#include <CTextToHexSeq.h>
+/**
+ * @file CTextToHexSeq.cpp
+ * @author Marc Sachße
+ * @brief Converts the variable text to a C-String with hex sequences
+ * @version 1.0
+ * @date 15-07-2023
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
 
-#include <iomanip>
+#include <CTextToHexSeq.h>
 
 namespace Codegenerator {
 

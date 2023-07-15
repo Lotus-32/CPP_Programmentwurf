@@ -1,3 +1,14 @@
+/**
+ * @file CTextToEscSeq.h
+ * @author Marc Sachße
+ * @brief Converts the variable text to a C-String with escape sequences
+ * @version 1.0
+ * @date 15-07-2023
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
+
 #ifndef CTEXTTOESCSEQ_H
 #define CTEXTTOESCSEQ_H
 

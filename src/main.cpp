@@ -1,3 +1,14 @@
+/**
+ * @file main.cpp
+ * @authors Timo Bauermeister, Tobias Skoberla
+ * @brief The main file of the code generator
+ * @version 1.0
+ * @date 15-07-2023
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 #include <CCodegenerator.h>
 #include <CTextToCPP.h>
 #include <Options.h>
