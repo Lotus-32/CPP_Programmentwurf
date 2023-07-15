@@ -15,20 +15,21 @@ add_definitions(-DELPP_NO_DEFAULT_LOG_FILE -DELPP_FEATURE_PERFORMANCE_TRACKING)
 # Set the path to the header files
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
+
+# Add the subdirectory "jsoncpp" to the build
+IF(MINGW)
+# Include JSONCPP
+include_directories(C:/src/jsoncpp/include)
+link_directories(C:/src/jsoncpp/build/lib)
+ELSE()
+# UNIX finds it automatically
+ENDIF()
+
 # Create an executable called "programm" from the source files
 add_executable(${PROJECT_NAME} src/main.cpp)
 
 # Add the subdirectory "easyloggingpp" to the build
 add_subdirectory(src)
-
-# Add the subdirectory "jsoncpp" to the build
-IF(MINGW)
-    # Include JSONCPP
-    include_directories(C:/src/jsoncpp/include)
-    link_directories(C:/src/jsoncpp/build/lib)
-ELSE()
-    # UNIX finds it automatically
-ENDIF()
 
 # Link the executable to the libraries
 IF(MINGW)

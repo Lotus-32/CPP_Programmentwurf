@@ -127,6 +127,9 @@ string toLowerCases(const string& input) {
 int main(int argc, char** argv) {
   initLogging();
 
+  LOG(INFO) << "Codegenerator started" << endl;
+  cout << "Codegenerator started" << endl;
+
   CTextToCPP* textToCPP = new CTextToCPP();
   Options* commandOptions = new Options();
   commandOptions->parseGlobaleOptions(argc, argv);
