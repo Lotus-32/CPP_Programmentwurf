@@ -1,8 +1,8 @@
 # CPP_Programmentwurf
 
-Ausführbare Datei "codegenerator" erstellen mit:
-  "cmake CMakeLists.txt"
-Danach:
-  "make"
+Additional libary that must be installed: "jsoncpp". Under windows the CMakeLists.txt must be adapted for it.
 
-In "assets/sample.txt" liegt eine Beispieldatei, die mit codegenerator verarbeitet werden kann.
+Create executable file "codegenerator" with: "cmake CMakeLists.txt"
+After that: "make"
+
+"assets/sample.txt" is a sample file, which can be processed with codegenerator.

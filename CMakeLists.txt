@@ -24,8 +24,8 @@ add_subdirectory(src)
 # Add the subdirectory "jsoncpp" to the build
 IF(MINGW)
     # Include JSONCPP
-    # include_directories(C:/)
-    # link_directories(C:/)
+    include_directories(C:/src/vcpkg/installed/x86-windows/include)
+    link_directories(C:/src/vcpkg/installed/x86-windows/lib)
 ELSE()
     # UNIX finds it automatically
 ENDIF()
