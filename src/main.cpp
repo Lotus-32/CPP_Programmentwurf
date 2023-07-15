@@ -19,12 +19,13 @@
 #include <iostream>
 #include <sstream>
 
+
 #ifndef _WIN32
 #include <filesystem>
 namespace fs = std::filesystem;
 #else
-#include <direct.h>
-#define CREATE_DIRECTORY(path) _mkdir(path)
+#include <unistd.h>
+#include <sys/stat.h>
 #endif
 
 using namespace std;
@@ -56,6 +57,45 @@ void initLogging() {
 }
 
 /**
+ * The function "pathExists" checks if a file or directory exists at the given path.
+ * 
+ * @param path The path parameter is a string that represents the file or directory path that we want
+ * to check for existence.
+ * 
+ * @return a boolean value. It returns true if the path exists and false if it does not exist.
+ */
+bool pathExists(const string& path) {
+  if (access(path.c_str(), F_OK) != -1) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+/**
+ * The function creates directories recursively based on a given path.
+ * 
+ * @param path The `path` parameter is a string that represents the directory path that needs to be
+ * created.
+ */
+void createDirectories(const std::string& path) {
+    std::string subPath;
+    for (int i = 0; i < path.length(); i++) {
+        if (path[i] == '/') {
+            if (!pathExists(subPath)) {
+                std::cout << "Creating directory: " << subPath << std::endl;
+                mkdir(subPath.c_str());
+            }
+        }
+        subPath += path[i];
+    }
+    if (!pathExists(subPath)) {
+        std::cout << "Creating directory: " << subPath << std::endl;
+        mkdir(subPath.c_str());
+    }
+}
+
+/**
  * Creates a file with the given name and content in the specified path,
  * handling any necessary directory creation.
  *
@@ -77,10 +117,9 @@ void createFile(const string& fileName, const string& content,
     }
   }
 #else
-  if (CREATE_DIRECTORY(correctedPath.c_str()) != 0) {
-    cerr << "Error creating the directory: " << correctedPath << endl;
-    exit(1);
-  }
+if (!pathExists(correctedPath)) {
+  createDirectories(correctedPath);
+}
 #endif
 
   ofstream outputFile(correctedPath + "/" + fileName);
@@ -175,6 +214,10 @@ int main(int argc, char** argv) {
         localeOptions->getOutputFilename(), implementation);
 
     string sourceType = "." + toLowerCases(localeOptions->getOutputType());
+
+    LOG(INFO) << "Header path exists: " << pathExists(localeOptions->getHeaderDir())
+              << endl;
+    LOG(INFO) << "Source path exists: " << pathExists(localeOptions->getSourceDir()) << endl;
     createFile(localeOptions->getOutputFilename() + ".h", declaration,
                localeOptions->getHeaderDir());
     createFile(localeOptions->getOutputFilename() + sourceType, implementation,
