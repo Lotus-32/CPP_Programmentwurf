@@ -65,7 +65,7 @@ CTextToCPP *CCodegenerator::processVariableParams(
           lineNumber, json.get(VAR_TEXTSEGMENT, false).asBool(),
           json.get(VAR_DOXYGEN, "").asString());
     }
-    cerr << "Thats not an implemented sequence!" << errors << endl;
+    cerr << "That's not an implemented sequence!" << errors << endl;
     exit(1);
   } else {
     cerr << "Error parsing attribute parameters: " << errors << endl;
@@ -130,7 +130,7 @@ void CCodegenerator::processString(const string &fileContent,
   string extractedContent =
       extractContentBetweenTags(fileContent, "@start\n", "@end\n");
   if (extractedContent.empty()) {
-    cerr << "Din't find any parameters!" << endl;
+    cerr << "Didn't find any parameters!" << endl;
     exit(1);
   }
 
