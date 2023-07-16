@@ -163,12 +163,7 @@ string CTextToEscSeq::wordWrap(string text, const char cut, int maxLineLength) {
       i = 0;
       continue;
     }
-    if (text[i] == '\\' && !inEscapeSequence) {
-      inEscapeSequence = true;
-    } else {
-      inEscapeSequence = false;
-    }
-
+    inEscapeSequence = (text[i] == '\\' && !inEscapeSequence);
     if (lineLength > maxLineLength && !inEscapeSequence) {
       wrappedText += "\"" + text.substr(0, i) + "\" \\\n";
       text = text.substr(i);
