@@ -86,6 +86,7 @@ string CTextToEscSeq::writeImplementation() {
         } else {
           imp += "\\n";  // UNIX (LF)
         }
+        imp += "\n";
         break;
       case '\r':
         imp += "\\r";
@@ -155,18 +156,29 @@ string CTextToEscSeq::wordWrap(string text, const char cut, int maxLineLength) {
   bool inEscapeSequence = false;
 
   for (int i = 0; i < text.length(); i++) {
+    if (text[i] == '\n') {
+      wrappedText += "\"" + text.substr(0, i) + "\" \\\n";
+      text = text.substr(i + 1);
+      lineLength = 0;
+      i = 0;
+      continue;
+    }
     if (text[i] == '\\' && !inEscapeSequence) {
       inEscapeSequence = true;
     } else {
       inEscapeSequence = false;
     }
 
-    if (lineLength >= maxLineLength && !inEscapeSequence ||
-        lineLength + 1 >= maxLineLength && inEscapeSequence) {
+    if (lineLength > maxLineLength && !inEscapeSequence) {
       wrappedText += "\"" + text.substr(0, i) + "\" \\\n";
       text = text.substr(i);
       lineLength = 0;
-      i = -1;  // Resetting the loop index to start from the beginning
+      i = -1;
+    } else if (lineLength + 1 > maxLineLength && inEscapeSequence) {
+      wrappedText += "\"" + text.substr(0, i - 1) + "\" \\\n";
+      text = text.substr(i - 1);
+      lineLength = 0;
+      i = -1;
     }
 
     lineLength++;

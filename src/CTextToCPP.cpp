@@ -169,7 +169,13 @@ string CTextToCPP::wordWrap(string text, const char cut, int maxLineLength) {
     if (text[i] == cut) {
       lastSpace = i;
     }
-
+    if (text[i] == '\n') {
+      wrappedText += "\"" + text.substr(0, i) + "\" \\\n";
+      text = text.substr(i + 1);
+      lineLength = 0;
+      i = 0;
+      continue;
+    }
     if (lineLength >= maxLineLength) {
       wrappedText += "\"" + text.substr(0, lastSpace) + "\" \\\n";
       text = text.substr(lastSpace);

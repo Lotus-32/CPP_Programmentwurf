@@ -61,6 +61,7 @@ CTextToHexSeq::~CTextToHexSeq() {}
 string CTextToHexSeq::writeImplementation() {
   string imp;
   stringstream ss;
+  bool addnewline = false;
 
   for (char c : text) {
     if (c == '\n') {
@@ -70,14 +71,20 @@ string CTextToHexSeq::writeImplementation() {
         imp += ss.str();
         ss.str("");
         if (nl == "MAC") {
+          imp += "\n";
           continue;
         }
       }
+      addnewline = true;
     }
     ss << hex << setw(2) << setfill('0') << (int)c;
     imp += "\\x";
     imp += ss.str();
     ss.str("");
+    if (addnewline) {
+      imp += "\n";
+      addnewline = false;
+    }
   }
 
   imp = VAR_IMPLEMENTATION + name + " = {\n" +

@@ -88,6 +88,7 @@ string CTextToRawHexSeq::writeDeclaration() {
 string CTextToRawHexSeq::writeImplementation() {
   string imp;
   stringstream ss;
+  bool addnewline = false;
 
   for (char c : text) {
     if (c == '\n') {
@@ -96,13 +97,19 @@ string CTextToRawHexSeq::writeImplementation() {
         imp += ss.str();
         ss.str("");
         if (nl == "MAC") {
+          imp += "\n";
           continue;
         }
       }
+      addnewline = true;
     }
     ss << "0x" << hex << setw(2) << setfill('0') << (int)c << ", ";
     imp += ss.str();
     ss.str("");
+    if (addnewline) {
+      imp += "\n";
+      addnewline = false;
+    }
   }
   // Komma und Leerzeichen am Ende entfernen
   if (!imp.empty()) {
@@ -148,15 +155,19 @@ string CTextToRawHexSeq::wordWrap(string text, const char cut,
     if (text[i] == cut) {
       lastSpace = i;
     }
-
+    if (text[i] == '\n') {
+      wrappedText += text.substr(0, i) + " \\\n";
+      text = text.substr(i + 1);
+      lineLength = 0;
+      i = 0;
+      continue;
+    }
     if (lineLength >= maxLineLength) {
       wrappedText += text.substr(0, lastSpace) + " \\\n";
-
       text = text.substr(lastSpace);
       lineLength = 0;
       i = 0;
     }
-
     lineLength++;
   }
 
