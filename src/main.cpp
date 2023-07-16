@@ -23,6 +23,7 @@
 #define CREATE_DIRECTORY(path) mkdir(path)
 #else
 #include <sys/types.h>
+#include <unistd.h>
 #define CREATE_DIRECTORY(path) mkdir(path, 0700)
 #endif
 
