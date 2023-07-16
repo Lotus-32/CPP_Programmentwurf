@@ -45,7 +45,7 @@ CTextToOctSeq::CTextToOctSeq(string name, string text, int signperline,
              << " " << addtextsegment << " " << doxygen << "\n"
              << text;
 
-  if (text == "") {
+  if (text.empty()) {
     cerr << "Error: The input file is not formatted correctly" << endl;
     exit(1);
   }

@@ -13,12 +13,9 @@
 #include <CTextToCPP.h>
 #include <Options.h>
 #include <easylogging++.h>
-#include <stdio.h>
-#include <unistd.h>
 
 #include <fstream>
 #include <iostream>
-#include <sstream>
 
 // Cross-platform directory creation
 #ifdef _WIN32
@@ -83,13 +80,13 @@ bool pathExists(const string& path) {
  */
 void createDirectories(const string& path) {
   string subPath;
-  for (int i = 0; i < path.length(); i++) {
-    if (path[i] == '/') {
+  for (char i : path) {
+    if (i == '/') {
       if (!pathExists(subPath)) {
         CREATE_DIRECTORY(subPath.c_str());
       }
     }
-    subPath += path[i];
+    subPath += i;
   }
   if (!pathExists(subPath)) {
     CREATE_DIRECTORY(subPath.c_str());
@@ -168,7 +165,7 @@ int main(int argc, char** argv) {
 
   // Start of Codegenerator ---------------------------------------------
 
-  for (string file : files) {
+  for (const string& file : files) {
     LOG(INFO) << "File: " << file << endl;
 
     // Open input file and read its contents
